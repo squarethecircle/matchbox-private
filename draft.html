@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <style>
+    #circle
+      {
+      border-radius:50% 50% 50% 50%;
+      width:300px;
+      height:300px;
+      }
+    </style>
+    <title>MatchmakingMVP: {{boy}} and {{ girl }}</title>
+  </head>
+  <body>
+      <h1>
+        <center><b>{{ boy }} and {{ girl }}</b></center>
+      </h1>
+      <p title="Profile Pictures">
+      <center><img src={{ boypp }} alt={{ boy }} width="200" height="200"
+              id="circle">
+              <img src={{ girlpp }} alt={{ girl }} width="200" height="200"
+              id="circle"></center>
+      </p>
+      <p title="Arrows">
+        <pre>
+          <center><img src="redleftarrow.png" alt="Red Left Arrow" width = "50" height="30"> <img src="greenrightarrow.png" alt="Green Right Arrow" width = "50" height="30"></center>
+        </pre>
+      </p>
+  </body>
+</html>
