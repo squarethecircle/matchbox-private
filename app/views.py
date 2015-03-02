@@ -28,7 +28,7 @@ def index():
 @app.route('/match')
 def match():
 	#resp = facebook.get('me/friends?fields=name,id,education')
-	resp = facebook.get('fql?q=SELECT name,uid,pic_big,relationship_status,sex FROM user WHERE uid IN (SELECT uid1 FROM friend WHERE uid2=me()) and ('Yale University' in education or 'Yale' in affiliations)')
+	resp = facebook.get('fql?q=SELECT%20name%2Cuid%2Cpic_big%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)')
 	if resp.status == 200:
 		friends = resp.data
 	return jsonify(friends)
