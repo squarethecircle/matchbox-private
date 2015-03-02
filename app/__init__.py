@@ -1,10 +1,6 @@
 from flask import Flask
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
-#from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-#        UserMixin, RoleMixin, login_required
-#from flask.ext.social import Social
-#from flask.ext.social.datastore import SQLAlchemyConnectionDatastore
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
