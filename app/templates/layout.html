@@ -5,12 +5,12 @@
         <center>{{ boy }} and {{ girl }}</center>
       </h1>
       <p title="Profile Pictures">
-      <center><img src={{ boypp }} alt={{ boy }} width="450" height="450"
+      <center><img src={{ boypp }} alt={{ boy }} width="250" height="250"
               class="circle">
-              <img src={{ girlpp }} alt={{ girl }} width="450" height="450"
+              <img src={{ girlpp }} alt={{ girl }} width="250" height="250"
               class="circle"></center>
       </p>
       <p title="Arrows">
-          <center><img src="/img/redleftarrow.png" alt="Red Left Arrow" width = "200" height="120"> <img src="/img/greenrightarrow.png" alt="Green Right Arrow" width = "200" height="120"></center>
+          <center><img src="{{url_for('static',filename='img/redleftarrow.png')}}" alt="Red Left Arrow" width = "100" height="60"> <img src="{{url_for('static',filename='img/greenrightarrow.png')}}" alt="Green Right Arrow" width = "100" height="60"></center>
       </p>
 {% endblock %}      

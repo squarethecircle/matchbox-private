@@ -1,8 +1,15 @@
 from flask import Flask
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
+import redis
+from flask_kvsession import KVSessionExtension
+from simplekv.memory.redisstore import RedisStore
 
 app = Flask(__name__)
+store = RedisStore(redis.StrictRedis())
+
+KVSessionExtension(store, app)
+
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -18,11 +25,12 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=os.environ['MATCHMAKING_FB_APP_KEY'],
     consumer_secret=os.environ['MATCHMAKING_FB_APP_SECRET'],
-    request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history']}
+    request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history','friends_relationships']}
 )
 
 
 db = SQLAlchemy(app)
+
 
 
 from app import views
