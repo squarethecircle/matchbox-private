@@ -1,16 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
-      <h1>
-        <center>{{ boy }} and {{ girl }}</center>
+      <h1 id="matchnames">
+        {{ boy }} and {{ girl }}
       </h1>
-      <p title="Profile Pictures">
-      <center><img src={{ boypp }} alt={{ boy }} width="250" height="250"
-              class="circle">
-              <img src={{ girlpp }} alt={{ girl }} width="250" height="250"
-              class="circle"></center>
-      </p>
-      <p title="Arrows">
-          <center><img src="{{url_for('static',filename='img/redleftarrow.png')}}" alt="Red Left Arrow" width = "100" height="60"> <img src="{{url_for('static',filename='img/greenrightarrow.png')}}" alt="Green Right Arrow" width = "100" height="60"></center>
-      </p>
+      <div style="text-align:center" class="hero-unit bottom">
+      <div>
+        <img src="{{ boypp }}" id="boy" fbid="{{ boyid }}" alt="{{ boy }}" class="circle" style="left:-20px">
+
+        <img src="{{ girlpp }}" id="girl" fbid = "{{ girlid }}" alt="{{ girl }}" class="circle" style= "left:20px">
+      </div>
+         <input type="image" src="{{url_for('static',filename='img/redleftarrow.png')}}" id="downvote" width = "100" height="60"> <input type="image" src="{{url_for('static',filename='img/greenrightarrow.png')}}" id="upvote" width = "100" height="60">
+      </div>
+
+
+
+      <script>
+      function upvoteMatch()
+      {
+        boy=$('#boy').attr('fbid');
+        girl=$('#girl').attr('fbid');
+        $.post('match', {friend1:boy, friend2:girl,result:"accept"}, function(data)
+          {
+            newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+          }); 
+
+      }
+      function downvoteMatch()
+      {
+        boy=$('#boy').attr('fbid');
+        girl=$('#girl').attr('fbid');
+        $.post('match', {friend1:boy, friend2:girl,result:"reject"}, function(data)
+        {
+          newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+        }); 
+      }
+
+      $('#upvote').click(upvoteMatch);
+      $('#downvote').click(downvoteMatch);
+      function newMatch(boy,girl,boypp,girlpp,boyid,girlid)
+      {
+        $("#matchnames").replaceWith('<h1 id="matchnames">'+boy+' and '+girl+'</h1>');
+        $("#boy").replaceWith('<img src="'+boypp+'" id="boy" fbid="'+boyid+'" alt="'+boy+'" class="circle" style="left:-20px">')
+        $("#girl").replaceWith('<img src="'+girlpp+'" id="girl" fbid="'+girlid+'" alt="'+girl+'" class="circle" style="left:20px">')
+      }
+      </script>
 {% endblock %}      

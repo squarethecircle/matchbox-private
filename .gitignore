@@ -2,3 +2,4 @@ flask
 *.pyc
 *.db
 tmp
+*.rdb

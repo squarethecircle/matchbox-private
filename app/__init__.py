@@ -1,9 +1,10 @@
 from flask import Flask
 import os
-from flask.ext.sqlalchemy import SQLAlchemy
+#from flask.ext.sqlalchemy import SQLAlchemy
 import redis
 from flask_kvsession import KVSessionExtension
 from simplekv.memory.redisstore import RedisStore
+from mongoengine import connect 
 
 app = Flask(__name__)
 store = RedisStore(redis.StrictRedis())
@@ -28,9 +29,8 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history','friends_relationships']}
 )
 
-
-db = SQLAlchemy(app)
-
+#db = SQLAlchemy(app)
+connect('matches')
 
 
 from app import views

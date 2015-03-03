@@ -1,9 +1,7 @@
-from app import db
+from mongoengine import *
 
-
-class Match(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	friend1 = db.Column(db.String(64), index=True)
-	friend2 = db.Column(db.String(64), index=True)
-	matcher = db.Column(db.String(64), index=True)
-
+class Match(Document):
+	friends = ListField(StringField(max_length=30),required=True)
+	matchers = ListField(StringField(max_length=30))
+	nonmatchers = ListField(StringField(max_length=30))
+	confirmed = BooleanField(required=True)
