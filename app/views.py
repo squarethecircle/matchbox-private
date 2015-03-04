@@ -49,7 +49,7 @@ def match():
 	session['female_friends'] = female_friends
 	match_pair = (male_friends[randint(0,len(male_friends)-1)],female_friends[randint(0,len(female_friends)-1)])
 
-	return render_template('layout.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
+	return render_template('match.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
 			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
 			boyid=match_pair[0]['uid'],girlid=match_pair[0]['uid'])
 
