@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	connect('matches')
 else:
-	connect(os.environ['MONGODB_PROD'])
+	connect(os.environ['MONGOLAB_URI'])
 
 from flask_oauth import OAuth
 import os
