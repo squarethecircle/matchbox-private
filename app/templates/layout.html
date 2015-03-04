@@ -46,7 +46,7 @@
       }
       up_depressed = false;
       down_depressed = false
-      $(document).keydown(function()
+      $(document).keydown(function(event)
       {
         if (!(up_depressed || down_depressed))
         {
@@ -65,7 +65,7 @@
         }
         
       });
-      $(document).keyup(function()
+      $(document).keyup(function(event)
       {
           if (event.which == 38) 
           {
