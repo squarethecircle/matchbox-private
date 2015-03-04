@@ -17,7 +17,7 @@ if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	KVSessionExtension(store, app)
 
 else:
-	connect(os.environ['MONGOLAB_URI'])
+	connect('matches',host=os.environ['MONGOLAB_URI'])
 	url = urlparse.urlparse(os.environ['REDISCLOUD_URL'])
 	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password))
 	KVSessionExtension(store, app)
