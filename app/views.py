@@ -63,7 +63,7 @@ def acceptMatch():
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
 			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,nonmatchers=[],num_nonmatchers=0,confirmed=False).save()
-		else:
+		else if session['fbid'] not in query.matchers:
 			query.matchers.append(session['fbid'])
 			query.num_matchers += 1
 			query.save()
@@ -71,7 +71,7 @@ def acceptMatch():
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
 			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,nonmatchers=[session['fbid']],num_nonmatchers=1,confirmed=False).save()
-		else:
+		else if session['fbid'] not in query.nonmatchers:
 			query.nonmatchers.append(session['fbid'])
 			query.num_nonmatchers += 1
 			query.save()
