@@ -10,7 +10,7 @@ def get_facebook_token(token=None):
 
 @app.route('/login')
 def login():
-	return facebook.authorize(callback = 'http://localhost:5000/oauth_authorized')
+	return facebook.authorize(callback = app.config['APP_DOMAIN']+'oauth_authorized')
 
 @app.route('/oauth_authorized')
 @facebook.authorized_handler
