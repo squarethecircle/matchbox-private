@@ -3,6 +3,8 @@ from app import app,models,facebook
 from random import randint
 from models import Match
 
+blacklist = [1598222289,1389627032,100007479487216,100009034776491]
+
 @facebook.tokengetter
 def get_facebook_token(token=None):
     return session.get('facebook_token')
@@ -34,12 +36,14 @@ def match():
 		session['friends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Cpic_big%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
 	male_friends = []
 	female_friends = []
-	#return jsonify({'data':session['friends']})
+	return jsonify({'data':session['friends']})
 	for friend in session['friends']:
 		if friend['sex'] == 'male' and friend['relationship_status'] != 'In a relationship':
-			male_friends.append(friend)
+			if friend['uid'] not in blacklist:
+				male_friends.append(friend)
 		elif friend['sex'] == 'female' and friend['relationship_status'] != 'In a relationship':
-			female_friends.append(friend)
+			if friend['uid'] not in blacklist:
+				female_friends.append(friend)
 	session['male_friends'] = male_friends
 	session['female_friends'] = female_friends
 	match_pair = (male_friends[randint(0,len(male_friends)-1)],female_friends[randint(0,len(female_friends)-1)])
