@@ -1,4 +1,9 @@
 #!flask/bin/python
 from app import app
-app.run(debug=True)
+import os
+if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
+	app.run(debug=True)
+else:
+	app.run()
+
 

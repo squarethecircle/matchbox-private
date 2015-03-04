@@ -1,6 +1,5 @@
 from flask import Flask
 import os
-#from flask.ext.sqlalchemy import SQLAlchemy
 import redis
 from flask_kvsession import KVSessionExtension
 from simplekv.memory.redisstore import RedisStore
@@ -11,13 +10,16 @@ store = RedisStore(redis.StrictRedis())
 
 KVSessionExtension(store, app)
 
-app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
+
+
+if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
+	connect('matches')
+else:
+	connect(os.environ['MONGODB_PROD'])
 
 from flask_oauth import OAuth
-
+import os
 oauth = OAuth()
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
@@ -29,9 +31,5 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history','friends_relationships']}
 )
 
-#db = SQLAlchemy(app)
-connect('matches')
-
 
 from app import views
-
