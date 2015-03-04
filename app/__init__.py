@@ -4,19 +4,24 @@ import redis
 from flask_kvsession import KVSessionExtension
 from simplekv.memory.redisstore import RedisStore
 from mongoengine import connect 
+import urlparse
 
 app = Flask(__name__)
-store = RedisStore(redis.StrictRedis())
-
-KVSessionExtension(store, app)
-
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 
 
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	connect('matches')
+	app.config['DEBUG'] = True
+	store = RedisStore(redis.StrictRedis())
+	KVSessionExtension(store, app)
+
 else:
 	connect(os.environ['MONGOLAB_URI'])
+	url = urlparse.urlparse(os.environ['REDISCLOUD_URL'])
+	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password)
+	KVSessionExtension(store, app)
+
 
 from flask_oauth import OAuth
 import os
