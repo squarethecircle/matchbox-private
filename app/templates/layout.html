@@ -10,7 +10,7 @@
 
         <img src="{{ girlpp }}" id="girl" fbid = "{{ girlid }}" alt="{{ girl }}" class="circle" style= "left:20px">
       </div>
-         <input type="image" src="{{url_for('static',filename='img/redleftarrow.png')}}" id="downvote" width = "100" height="60"> <input type="image" src="{{url_for('static',filename='img/greenrightarrow.png')}}" id="upvote" width = "100" height="60">
+         <input type="image" src="{{url_for('static',filename='img/thumbsdown.png')}}" id="downvote" width = "60" height="60" style = "left:-20px"> <input type="image" src="{{url_for('static',filename='img/thumbsup.png')}}" id="upvote" width = "60" height="60" style="left:20px">
       </div>
 
 
@@ -44,5 +44,36 @@
         $("#boy").replaceWith('<img src="'+boypp+'" id="boy" fbid="'+boyid+'" alt="'+boy+'" class="circle" style="left:-20px">')
         $("#girl").replaceWith('<img src="'+girlpp+'" id="girl" fbid="'+girlid+'" alt="'+girl+'" class="circle" style="left:20px">')
       }
+      up_depressed = false;
+      down_depressed = false
+      $(document).keydown(function()
+      {
+        if (!(up_depressed || down_depressed))
+        {
+          if (event.which == 38) 
+            {
+              upvoteMatch();
+              up_depressed = true; 
+            }
+          else if (event.which == 40)
+          {
+            downvoteMatch();
+            down_depressed = true;
+          }
+        }
+        
+      });
+      $(document).keyup(function()
+      {
+          if (event.which == 38) 
+          {
+            up_depressed = false; 
+          }
+          else if (event.which == 40)
+          {
+            down_depressed = false;
+          }
+
+      });
       </script>
 {% endblock %}      
