@@ -3,3 +3,4 @@ flask
 *.db
 tmp
 *.rdb
+db_connect
