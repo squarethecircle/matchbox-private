@@ -52,11 +52,13 @@
         {
           if (event.which == 38) 
             {
+              event.preventDefault();
               upvoteMatch();
               up_depressed = true; 
             }
           else if (event.which == 40)
           {
+            event.preventDefault();
             downvoteMatch();
             down_depressed = true;
           }
@@ -67,10 +69,12 @@
       {
           if (event.which == 38) 
           {
+            event.preventDefault();
             up_depressed = false; 
           }
           else if (event.which == 40)
           {
+            event.preventDefault();
             down_depressed = false;
           }
 
