@@ -62,16 +62,18 @@ def acceptMatch():
 	if request.form.get('result') == 'accept':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],nonmatchers=[],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,nonmatchers=[],num_nonmatchers=0,confirmed=False).save()
 		else:
 			query.matchers.append(session['fbid'])
+			query.num_matchers += 1
 			query.save()
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],nonmatchers=[session['fbid']],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,nonmatchers=[session['fbid']],num_nonmatchers=1,confirmed=False).save()
 		else:
 			query.nonmatchers.append(session['fbid'])
+			query.num_nonmatchers += 1
 			query.save()
 	match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
