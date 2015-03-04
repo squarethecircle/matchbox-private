@@ -55,21 +55,21 @@ def match():
 
 @app.route('/match',methods=['POST'])
 def acceptMatch():
+	friend1 = request.form.get('friend1')
+	friend2 = request.form.get('friend2')
+	friend1name = request.form.get('friend1name')
+	friend2name = request.form.get('friend2name')
 	if request.form.get('result') == 'accept':
-		friend1 = request.form.get('friend1')
-		friend2 = request.form.get('friend2')
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],matchers=[session['fbid']],nonmatchers=[],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],nonmatchers=[],confirmed=False).save()
 		else:
 			query.matchers.append(session['fbid'])
 			query.save()
 	elif request.form.get('result') == 'reject':
-		friend1 = request.form.get('friend1')
-		friend2 = request.form.get('friend2')
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],matchers=[],nonmatchers=[session['fbid']],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],nonmatchers=[session['fbid']],confirmed=False).save()
 		else:
 			query.nonmatchers.append(session['fbid'])
 			query.save()

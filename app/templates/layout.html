@@ -18,9 +18,7 @@
       <script>
       function upvoteMatch()
       {
-        boy=$('#boy').attr('fbid');
-        girl=$('#girl').attr('fbid');
-        $.post('match', {friend1:boy, friend2:girl,result:"accept"}, function(data)
+        $.post('match', {friend1:"{{boyid}}", friend2:"{{girlid}}", friend1name:"{{boy}}",friend2name:"{{girl}}",result:"accept"}, function(data)
           {
             newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
           }); 
@@ -28,9 +26,7 @@
       }
       function downvoteMatch()
       {
-        boy=$('#boy').attr('fbid');
-        girl=$('#girl').attr('fbid');
-        $.post('match', {friend1:boy, friend2:girl,result:"reject"}, function(data)
+        $.post('match', {friend1:"{{boyid}}", friend2:"{{girlid}}",friend1name:"{{boy}}",friend2name:"{{girl}}",result:"reject"}, function(data)
         {
           newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
         }); 
