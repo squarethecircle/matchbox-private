@@ -31,12 +31,13 @@ def index():
 	return "Hello World"
 @app.route('/match',methods=['GET'])
 def match():
+
 	#resp = facebook.get('me/friends?fields=name,id,education')
 	if session.get('friends') is None:
-		session['friends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Cpic_big%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
+		session['friends'] = facebook.get('v1.0/fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
 	male_friends = []
 	female_friends = []
-	return jsonify({'data':session['friends']})
+	#return jsonify({'data':session['friends']})
 	for friend in session['friends']:
 		if friend['sex'] == 'male' and friend['relationship_status'] != 'In a relationship':
 			if friend['uid'] not in blacklist:
@@ -47,8 +48,9 @@ def match():
 	session['male_friends'] = male_friends
 	session['female_friends'] = female_friends
 	match_pair = (male_friends[randint(0,len(male_friends)-1)],female_friends[randint(0,len(female_friends)-1)])
+
 	return render_template('layout.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
-			boypp=match_pair[0]['pic_big'],girlpp=match_pair[1]['pic_big'],
+			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
 			boyid=match_pair[0]['uid'],girlid=match_pair[0]['uid'])
 
 @app.route('/match',methods=['POST'])
@@ -72,10 +74,15 @@ def acceptMatch():
 			query.nonmatchers.append(session['fbid'])
 			query.save()
 	match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
-	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':match_pair[0]['pic_big'],
-				'girlpp':match_pair[1]['pic_big'],'boyid':match_pair[0]['uid'],
+	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
+				'girlpp':getPhoto(match_pair[1]['uid']),'boyid':match_pair[0]['uid'],
 				'girlid':match_pair[0]['uid']}
 	return jsonify(new_match)
+
+def getPhoto(uid):
+	photo = facebook.get('v1.0/fql?q=SELECT%20pic_crop%20from%20profile%20where%20id%3D'+str(uid)).data['data'][0]['pic_crop']
+	return photo['uri']
+
 
 
 
