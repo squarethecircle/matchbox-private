@@ -23,6 +23,7 @@ else:
 	url = urlparse.urlparse(os.environ['REDISCLOUD_URL'])
 	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password))
 	KVSessionExtension(store, app)
+	app.config['PROPAGATE_EXCEPTIONS'] = True
 
 
 from flask_oauth import OAuth
