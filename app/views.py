@@ -22,13 +22,15 @@ def oauth_authorized(resp):
 		flash(u'You denied the request to sign in.')
 		return redirect(next_url)
 	session['facebook_token'] = (resp['access_token'], resp['expires'])
-	session['fbid'] = facebook.get('me?fields=id').data['id']
-	return redirect('/index')
+	basic_info = facebook.get('me?fields=id,name').data
+	session['fbid'] = basic_info['id']
+	session['name'] = basic_info['name']
+	return redirect('/match')
 
 @app.route('/')
 @app.route('/index')
 def index():
-	return "Hello World"
+	return render_template('landingpage.html')
 @app.route('/match',methods=['GET'])
 def match():
 
@@ -86,17 +88,19 @@ def acceptMatch():
 	if request.form.get('result') == 'accept':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,nonmatchers=[],num_nonmatchers=0,confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,matcher_names=[session['name']],nonmatchers=[],num_nonmatchers=0,nonmatcher_names=[],confirmed=False).save()
 		elif session['fbid'] not in query.matchers:
 			query.matchers.append(session['fbid'])
+			query.matcher_names.append(session['name'])
 			query.num_matchers += 1
 			query.save()
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,nonmatchers=[session['fbid']],num_nonmatchers=1,confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,matcher_names=[],nonmatchers=[session['fbid']],num_nonmatchers=1,nonmatcher_names=[session['name']],confirmed=False).save()
 		elif session['fbid'] not in query.nonmatchers:
 			query.nonmatchers.append(session['fbid'])
+			query.nonmatcher_names.append(session['name'])
 			query.num_nonmatchers += 1
 			query.save()
 
@@ -113,7 +117,7 @@ def acceptMatch():
 
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
 				'girlpp':getPhoto(match_pair[1]['uid']),'boyid':match_pair[0]['uid'],
-				'girlid':match_pair[0]['uid']}
+				'girlid':match_pair[1]['uid']}
 	return jsonify(new_match)
 
 def getPhoto(uid):
