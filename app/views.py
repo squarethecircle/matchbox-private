@@ -93,7 +93,7 @@ def match():
 	
 	return render_template('match.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
 			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
-			boyid=match_pair[0]['uid'],girlid=match_pair[0]['uid'])
+			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'])
 
 @app.route('/match',methods=['POST'])
 def acceptMatch():
