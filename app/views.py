@@ -1,7 +1,7 @@
 from flask import render_template,session,redirect,url_for,request,flash,jsonify
 from app import app,models,facebook
 from random import randint
-from models import Match
+from models import Match, User
 
 blacklist = [1598222289,1389627032,100007479487216,100009034776491]
 
@@ -25,6 +25,10 @@ def oauth_authorized(resp):
 	basic_info = facebook.get('me?fields=id,name').data
 	session['fbid'] = basic_info['id']
 	session['name'] = basic_info['name']
+	query = User.objects(fbid=session['fbid']).first()
+	if query == None:
+		new_user = User(fbid=session['fbid'],seen_top_matches=[])
+		new_user.save()
 	return redirect('/match')
 
 @app.route('/')
@@ -56,13 +60,15 @@ def match():
 				lifestyle_female_friends.append(friend)
 			if friend['uid'] not in blacklist:
 				female_friends.append(friend)
+	user_obj = User.objects(fbid=session['fbid']).first()
 
 	for i in range(0, len(top_matches_ids)):
 		for malefriend in male_friends:
 			if malefriend['uid'] == top_matches_ids[i][0]:
 				for femalefriend in female_friends:
-					if femalefriend['uid'] ==  top_matches_ids[i][1]:
-						top_matches.append((malefriend, femalefriend))
+					if femalefriend['uid'] == top_matches_ids[i][1]:
+						if str((malefriend['uid'],femalefriend['uid'])) not in user_obj.seen_top_matches:
+							top_matches.append((malefriend, femalefriend))
 						break
 				break
 
@@ -108,6 +114,10 @@ def acceptMatch():
 	if x == 1 or x == 2:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
 		session['top_matches'].remove(match_pair)
+		user_obj = User.objects(fbid=session['fbid']).first()
+		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
+		user_obj.save()
+
 	elif x == 3:
 		match_pair = (session['lifestyle_male_friends'][randint(0,len(session['lifestyle_male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
 	elif x == 4:

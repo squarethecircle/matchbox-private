@@ -10,3 +10,7 @@ class Match(Document):
 	num_nonmatchers = IntField(required=True)
 	nonmatcher_names = ListField(StringField(max_length=100))
 	confirmed = BooleanField(required=True)
+
+class User(Document):
+	fbid = StringField(max_length=30,unique=True)
+	seen_top_matches = ListField(StringField(max_length=80))
