@@ -39,7 +39,8 @@ def oauth_authorized(resp):
 @app.route('/')
 @app.route('/index')
 def index():
-	return render_template('landingpage.html')
+	return "Hello World"
+#	return render_template('landingpage.html')
 @app.route('/match',methods=['GET'])
 def match():
 	if session.get('facebook_token') is None:
