@@ -117,7 +117,7 @@ def acceptMatch():
 			query.save()
 
 	x = randint(1,16)
-	if x == 1 or x == 2:
+	if x == 1 or x == 2 and session['top_matches']:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
 		session['top_matches'].remove(match_pair)
 		user_obj = User.objects(fbid=session['fbid']).first()
