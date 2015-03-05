@@ -30,6 +30,7 @@ def oauth_authorized(resp):
 	basic_info = facebook.get('me?fields=id,name').data
 	if 'fbid' in session and session['fbid'] != basic_info['id']:
 		session.pop('friends',None)
+	session.pop('friends',None)
 	session['fbid'] = basic_info['id']
 	session['name'] = basic_info['name']
 	query = User.objects(fbid=session['fbid']).first()
@@ -50,7 +51,7 @@ def match():
 		return redirect('/index')
 	#resp = facebook.get('me/friends?fields=name,id,education')
 	if session.get('friends') is None:
-		session['friends'] = facebook.get('v1.0/fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
+		session['friends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
 	male_friends = []
 	female_friends = []
 	top_matches = []
@@ -70,7 +71,7 @@ def match():
 				lifestyle_female_friends.append(friend)
 			if friend['uid'] not in blacklist:
 				female_friends.append(friend)
-	user_obj = User.objects(fbid=session['fbid'],num_seen=0).first()
+	user_obj = User.objects(fbid=session['fbid']).first()
 
 	for i in range(0, len(top_matches_ids)):
 		for malefriend in male_friends:
@@ -122,7 +123,7 @@ def acceptMatch():
 
 	x = randint(1,16)
 	user_obj = User.objects(fbid=session['fbid']).first()
-	user_obj.num_seen += 1
+	user_obj.num_submitted += 1
 	user_obj.save()
 	if (x == 1 or x == 2) and session['top_matches']:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
