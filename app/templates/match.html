@@ -16,15 +16,17 @@
 
 
       <script>
+      match_cache = {{match_cache|safe}};
       function upvoteMatch()
       {
         boy=$('#boy').attr('fbid');
         girl=$('#girl').attr('fbid');
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
+        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
         $.post('match', {friend1:boy, friend2:girl, friend1name:friend1name,friend2name:friend2name,result:"accept"}, function(data)
           {
-            newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+            match_cache=data;
           }); 
 
       }
@@ -34,10 +36,10 @@
         girl=$('#girl').attr('fbid');
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
-
+        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
         $.post('match', {friend1:boy, friend2:girl,friend1name:friend1name,friend2name:friend2name,result:"reject"}, function(data)
         {
-          newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+          match_cache=data;
         }); 
       }
 

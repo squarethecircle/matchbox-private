@@ -2,6 +2,7 @@ from flask import render_template,session,redirect,url_for,request,flash,jsonify
 from app import app,models,facebook
 from random import randint
 from models import Match, User
+import json
 
 blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666]
 
@@ -90,10 +91,14 @@ def match():
 	session['top_matches'] = top_matches
 
 	match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
-	
+	match_pair_cache = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
+
+	new_match={'boy':match_pair_cache[0]['name'],'girl':match_pair_cache[1]['name'],'boypp':getPhoto(match_pair_cache[0]['uid']),
+				'girlpp':getPhoto(match_pair_cache[1]['uid']),'boyid':match_pair_cache[0]['uid'],
+				'girlid':match_pair_cache[1]['uid']}
 	return render_template('match.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
 			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
-			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'])
+			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'],match_cache=json.dumps(new_match))
 
 @app.route('/match',methods=['POST'])
 def acceptMatch():
