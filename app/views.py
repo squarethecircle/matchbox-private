@@ -3,7 +3,7 @@ from app import app,models,facebook
 from random import randint
 from models import Match, User
 
-blacklist = [1598222289,1389627032,100007479487216,100009034776491]
+blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666]
 
 @facebook.tokengetter
 def get_facebook_token(token=None):
@@ -18,7 +18,7 @@ def login():
 def logout():
 	session.pop('facebook_token')
 	return redirect('/index')
-
+   	
 @app.route('/oauth_authorized')
 @facebook.authorized_handler
 def oauth_authorized(resp):
@@ -70,7 +70,7 @@ def match():
 				lifestyle_female_friends.append(friend)
 			if friend['uid'] not in blacklist:
 				female_friends.append(friend)
-	user_obj = User.objects(fbid=session['fbid']).first()
+	user_obj = User.objects(fbid=session['fbid'],num_seen=0).first()
 
 	for i in range(0, len(top_matches_ids)):
 		for malefriend in male_friends:
@@ -121,10 +121,12 @@ def acceptMatch():
 			query.save()
 
 	x = randint(1,16)
+	user_obj = User.objects(fbid=session['fbid']).first()
+	user_obj.num_seen += 1
+	user_obj.save()
 	if (x == 1 or x == 2) and session['top_matches']:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
 		session['top_matches'].remove(match_pair)
-		user_obj = User.objects(fbid=session['fbid']).first()
 		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
 		user_obj.save()
 

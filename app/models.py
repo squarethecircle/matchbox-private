@@ -14,3 +14,4 @@ class Match(Document):
 class User(Document):
 	fbid = StringField(max_length=30,unique=True)
 	seen_top_matches = ListField(StringField(max_length=80))
+	num_submitted = IntField(required=True)
