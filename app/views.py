@@ -30,7 +30,6 @@ def oauth_authorized(resp):
 	basic_info = facebook.get('me?fields=id,name').data
 	if 'fbid' in session and session['fbid'] != basic_info['id']:
 		session.pop('friends',None)
-	session.pop('friends',None)
 	session['fbid'] = basic_info['id']
 	session['name'] = basic_info['name']
 	query = User.objects(fbid=session['fbid']).first()
@@ -144,7 +143,7 @@ def acceptMatch():
 	return jsonify(new_match)
 
 def getPhoto(uid):
-	photo = facebook.get('v1.0/fql?q=SELECT%20pic_crop%20from%20profile%20where%20id%3D'+str(uid)).data['data'][0]['pic_crop']
+	photo = facebook.get('fql?q=SELECT%20pic_crop%20from%20profile%20where%20id%3D'+str(uid)).data['data'][0]['pic_crop']
 	return photo['uri']
 
 
