@@ -82,7 +82,7 @@ def match():
 						break
 				break
 
-
+	#return jsonify({'data':top_matches})
 	session['male_friends'] = male_friends
 	session['female_friends'] = female_friends
 	session['lifestyle_male_friends'] = lifestyle_male_friends
@@ -121,7 +121,7 @@ def acceptMatch():
 			query.save()
 
 	x = randint(1,16)
-	if x == 1 or x == 2 and session['top_matches']:
+	if (x == 1 or x == 2) and session['top_matches']:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
 		session['top_matches'].remove(match_pair)
 		user_obj = User.objects(fbid=session['fbid']).first()
