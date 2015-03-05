@@ -29,7 +29,7 @@ from flask_oauth import OAuth
 import os
 oauth = OAuth()
 facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/v1.0',
+    base_url='https://graph.facebook.com/',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
