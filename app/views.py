@@ -28,6 +28,8 @@ def oauth_authorized(resp):
 		return redirect(next_url)
 	session['facebook_token'] = (resp['access_token'], resp['expires'])
 	basic_info = facebook.get('me?fields=id,name').data
+	if 'fbid' in session and session['fbid'] != basic_info['id']:
+		session.pop('friends',None)
 	session['fbid'] = basic_info['id']
 	session['name'] = basic_info['name']
 	query = User.objects(fbid=session['fbid']).first()
@@ -39,8 +41,9 @@ def oauth_authorized(resp):
 @app.route('/')
 @app.route('/index')
 def index():
-	return "Hello World"
-#	return render_template('landingpage.html')
+	#return "Hello World"
+	return render_template('landingpage.html')
+
 @app.route('/match',methods=['GET'])
 def match():
 	if session.get('facebook_token') is None:
