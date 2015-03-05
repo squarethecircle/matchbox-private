@@ -35,7 +35,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=os.environ['MATCHMAKING_FB_APP_KEY'],
     consumer_secret=os.environ['MATCHMAKING_FB_APP_SECRET'],
-    request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history','friends_relationships']}
+    request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
 
 
