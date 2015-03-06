@@ -30,7 +30,7 @@ def oauth_authorized(resp):
 	session['facebook_token'] = (resp['access_token'], resp['expires'])
 	basic_info = facebook.get('me?fields=id,name').data
 	if 'fbid' in session and session['fbid'] != basic_info['id']:
-		session.pop('friends',None)
+		session.pop('fixedfriends',None)
 	session['fbid'] = basic_info['id']
 	session['name'] = basic_info['name']
 	query = User.objects(fbid=session['fbid']).first()
@@ -50,8 +50,8 @@ def match():
 	if session.get('facebook_token') is None:
 		return redirect('/index')
 	#resp = facebook.get('me/friends?fields=name,id,education')
-	if session.get('friends') is None:
-		session['friends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
+	if session.get('fixedfriends') is None:
+		session['fixedfriends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']
 	male_friends = []
 	female_friends = []
 	top_matches = []
@@ -59,8 +59,8 @@ def match():
 	lifestyle_female_friends = []
 	lifestyle_ids = [100000117930891, 1673808394, 749512978, 629263828, 1120293045, 100000279378280, 1646941022, 644659874, 707859779, 774168034, 821596896, 1235948517, 1306399238, 1293191998, 1391794445, 1471153226, 1522524524, 1666913902, 1577529446, 1598222289, 100004191697613, 100000359149448, 100000892201552, 100001288758840]
 	top_matches_ids = [(1375642201, 1646941022), (705579939, 100003888319326), (644659874, 1425476801), (707859779, 1321417892), (707859779, 100005920514441), (644659874, 100005920514441), (1375642201, 1522524524), (1306399238, 100000742350322), (1293191998, 100000742350322), (1235948517, 100004191697613), (100000279378280, 1397434942),  (100000486251970, 1490615349),  (100004797271381, 100000163821701), (100000117930891, 1391794445), (100000117930891, 1471153226), (821596896, 1471153226), (774168034,	1397434942), (100000117930891, 1321417892), (100000279378280, 1490615349), (821596896, 1391794445), (774168034, 100001663293430), (100000279378280, 1321417892), (774168034, 100000742350322), (1293191998, 1321417892), (1293191998, 1471153226), (100000279378280, 100000163821701), (1293191998, 1391794445), (100004797271381, 1425476801), (100000892201552, 1425476801), (100000892201552, 1522524524), (100000279378280, 1248783721), (100002804284636, 1248783721)]
-	#return jsonify({'data':session['friends']})
-	for friend in session['friends']:
+	#return jsonify({'data':session['fixedfriends']})
+	for friend in session['fixedfriends']:
 		if friend['sex'] == 'male' and friend['relationship_status'] != 'In a relationship':
 			if friend['uid'] in lifestyle_ids:
 				lifestyle_male_friends.append(friend)
