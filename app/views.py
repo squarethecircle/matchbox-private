@@ -35,7 +35,7 @@ def oauth_authorized(resp):
 	session['name'] = basic_info['name']
 	query = User.objects(fbid=session['fbid']).first()
 	if query == None:
-		new_user = User(fbid=session['fbid'],seen_top_matches=[],num_submitted=0)
+		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
 		new_user.save()
 	return redirect('/match')
 
