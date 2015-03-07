@@ -95,10 +95,10 @@ def match():
 
 	new_match={'boy':match_pair_cache[0]['name'],'girl':match_pair_cache[1]['name'],'boypp':getPhoto(match_pair_cache[0]['uid']),
 				'girlpp':getPhoto(match_pair_cache[1]['uid']),'boyid':match_pair_cache[0]['uid'],
-				'girlid':match_pair_cache[1]['uid']}
+				'girlid':match_pair_cache[1]['uid'],'acceptpercent':'100%','rejectpercent':'0%'}
 	return render_template('match.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
 			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
-			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'],match_cache=json.dumps(new_match))
+			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'],acceptpercent="",rejectpercent="",match_cache=json.dumps(new_match))
 
 @app.route('/match',methods=['POST'])
 def acceptMatch():
@@ -116,7 +116,9 @@ def acceptMatch():
 			query.matcher_names.append(session['name'])
 			query.num_matchers += 1
 			query.save()
-		print ("{0:.0f}%".format(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100))
+		acceptpercentfloat = float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100
+		acceptpercent = str(acceptpercentfloat) + "%"
+		rejectpercent = str(100-acceptpercentfloat) + "%"
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
@@ -127,8 +129,9 @@ def acceptMatch():
 			query.nonmatcher_names.append(session['name'])
 			query.num_nonmatchers += 1
 			query.save()
-		print ("{0:.0f}%".format(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100))
-
+		acceptpercentfloat = float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100
+		acceptpercent = str(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100) + "%"
+		rejectpercent = str(100-acceptpercentfloat) + "%"
 	x = randint(1,16)
 	user_obj = User.objects(fbid=session['fbid']).first()
 	user_obj.num_submitted += 1
@@ -138,7 +141,6 @@ def acceptMatch():
 		session['top_matches'].remove(match_pair)
 		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
 		user_obj.save()
-
 	elif x == 3:
 		match_pair = (session['lifestyle_male_friends'][randint(0,len(session['lifestyle_male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
 	elif x == 4:
@@ -148,12 +150,7 @@ def acceptMatch():
 
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
 				'girlpp':getPhoto(match_pair[1]['uid']),'boyid':match_pair[0]['uid'],
-				'girlid':match_pair[1]['uid']}
-
-	#for match in Match.objects:
-		#if match.friends == [str(match_pair[0]['uid']), str(match_pair[1]['uid'])]:
-			#print "{0:.0f}%".format(float(match.num_matchers)/(match.num_nonmatchers+match.num_matchers) * 100)				
-
+				'girlid':match_pair[1]['uid'],'acceptpercent':acceptpercent,'rejectpercent':rejectpercent}
 	return jsonify(new_match)
 
 
