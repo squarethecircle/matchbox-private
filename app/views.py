@@ -95,7 +95,7 @@ def match():
 
 	new_match={'boy':match_pair_cache[0]['name'],'girl':match_pair_cache[1]['name'],'boypp':getPhoto(match_pair_cache[0]['uid']),
 				'girlpp':getPhoto(match_pair_cache[1]['uid']),'boyid':match_pair_cache[0]['uid'],
-				'girlid':match_pair_cache[1]['uid'],'acceptpercent':'100%','rejectpercent':'0%'}
+				'girlid':match_pair_cache[1]['uid'],'acceptpercent':'No data','rejectpercent':'No data'}
 	return render_template('match.html',boy=match_pair[0]['name'], girl=match_pair[1]['name'],
 			boypp=getPhoto(match_pair[0]['uid']),girlpp=getPhoto(match_pair[1]['uid']),
 			boyid=match_pair[0]['uid'],girlid=match_pair[1]['uid'],acceptpercent="",rejectpercent="",match_cache=json.dumps(new_match))
@@ -116,9 +116,6 @@ def acceptMatch():
 			query.matcher_names.append(session['name'])
 			query.num_matchers += 1
 			query.save()
-		acceptpercentfloat = float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100
-		acceptpercent = str(acceptpercentfloat) + "%"
-		rejectpercent = str(100-acceptpercentfloat) + "%"
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
@@ -129,9 +126,6 @@ def acceptMatch():
 			query.nonmatcher_names.append(session['name'])
 			query.num_nonmatchers += 1
 			query.save()
-		acceptpercentfloat = float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100
-		acceptpercent = str(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100) + "%"
-		rejectpercent = str(100-acceptpercentfloat) + "%"
 	x = randint(1,16)
 	user_obj = User.objects(fbid=session['fbid']).first()
 	user_obj.num_submitted += 1
@@ -147,6 +141,14 @@ def acceptMatch():
 		match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['lifestyle_female_friends'][randint(0,len(session['lifestyle_female_friends'])-1)])
 	else:
 		match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
+	percentquery = Match.objects(friends__all=[str(match_pair[0]['uid']),str(match_pair[1]['uid'])]).first()
+	if percentquery == None:
+		acceptpercent = "No data"
+		rejectpercent = "No data"
+	else:
+		acceptpercentfloat = int(float(percentquery.num_matchers)/(percentquery.num_nonmatchers+percentquery.num_matchers) * 100)
+		acceptpercent = str(float(percentquery.num_matchers)/(percentquery.num_nonmatchers+percentquery.num_matchers) * 100) + "%"
+		rejectpercent = str(100-acceptpercentfloat) + "%"
 
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
 				'girlpp':getPhoto(match_pair[1]['uid']),'boyid':match_pair[0]['uid'],

@@ -14,7 +14,7 @@
           <font size="4" color="red" id="rejectpercent">
             {{ rejectpercent }}
           </font>
-          <input type="image" positon="fixed" src="{{url_for('static',filename='img/thumbsdown.png')}}" id="downvote" width = "60" height="60" style = "left:-20px"> <input type="image" position="fixed" src="{{url_for('static',filename='img/thumbsup.png')}}" id="upvote" width = "60" height="60" style="left:20px"> 
+          <input type="image" src="{{url_for('static',filename='img/thumbsdown.png')}}" id="downvote" width ="60" height="60" style ="left:-20px"> <input type="image" src="{{url_for('static',filename='img/thumbsup.png')}}" id="upvote" width ="60" height="60" style="left:20px"> 
           <font size="4" color="green" id="acceptpercent">
             {{ acceptpercent }}
           </font>
@@ -23,13 +23,17 @@
 
       <script>
       match_cache = {{match_cache|safe}};
+      acceptpercentage = "0%";
+      rejectpercentage = "0%";
       function upvoteMatch()
       {
         boy=$('#boy').attr('fbid');
         girl=$('#girl').attr('fbid');
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
-        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid,match_cache.acceptpercent,match_cache.rejectpercent);
+        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
+        acceptpercentage = match_cache.acceptpercent;
+        rejectpercentage = match_cache.rejectpercent;
         $.post('match', {friend1:boy, friend2:girl, friend1name:friend1name,friend2name:friend2name,result:"accept"}, function(data)
           {
             match_cache=data;
@@ -50,7 +54,7 @@
       }
       function showPercents()
       {
-        showPercentages(match_cache.acceptpercent,match_cache.rejectpercent)
+        showPercentages(acceptpercentage,rejectpercentage);
       }
 
       $('#upvote').click(upvoteMatch);
