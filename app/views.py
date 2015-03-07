@@ -4,7 +4,7 @@ from random import randint
 from models import Match, User
 import json
 
-blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666]
+blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666,100005208426975]
 
 @facebook.tokengetter
 def get_facebook_token(token=None):
@@ -36,7 +36,7 @@ def oauth_authorized(resp):
 	query = User.objects(fbid=session['fbid']).first()
 	if query == None:
 		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
-		new_user.save()
+		new_user.save()	
 	return redirect('/match')
 
 @app.route('/')
@@ -109,21 +109,25 @@ def acceptMatch():
 	if request.form.get('result') == 'accept':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,matcher_names=[session['name']],nonmatchers=[],num_nonmatchers=0,nonmatcher_names=[],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,matcher_names=[session['name']],nonmatchers=[],num_nonmatchers=0,nonmatcher_names=[],confirmed=False).save()	
+			query = new_match
 		elif session['fbid'] not in query.matchers:
 			query.matchers.append(session['fbid'])
 			query.matcher_names.append(session['name'])
 			query.num_matchers += 1
 			query.save()
+		print ("{0:.0f}%".format(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100))
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
 			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,matcher_names=[],nonmatchers=[session['fbid']],num_nonmatchers=1,nonmatcher_names=[session['name']],confirmed=False).save()
+			query = new_match		
 		elif session['fbid'] not in query.nonmatchers:
 			query.nonmatchers.append(session['fbid'])
 			query.nonmatcher_names.append(session['name'])
 			query.num_nonmatchers += 1
 			query.save()
+		print ("{0:.0f}%".format(float(query.num_matchers)/(query.num_nonmatchers+query.num_matchers) * 100))
 
 	x = randint(1,16)
 	user_obj = User.objects(fbid=session['fbid']).first()
@@ -145,7 +149,13 @@ def acceptMatch():
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
 				'girlpp':getPhoto(match_pair[1]['uid']),'boyid':match_pair[0]['uid'],
 				'girlid':match_pair[1]['uid']}
+
+	#for match in Match.objects:
+		#if match.friends == [str(match_pair[0]['uid']), str(match_pair[1]['uid'])]:
+			#print "{0:.0f}%".format(float(match.num_matchers)/(match.num_nonmatchers+match.num_matchers) * 100)				
+
 	return jsonify(new_match)
+
 
 def getPhoto(uid):
 	photo = facebook.get('fql?q=SELECT%20pic_crop%20from%20profile%20where%20id%3D'+str(uid)).data['data'][0]['pic_crop']
