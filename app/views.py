@@ -109,7 +109,7 @@ def acceptMatch():
 	if request.form.get('result') == 'accept':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=1,matcher_names=[session['name']],nonmatchers=[],num_nonmatchers=0,nonmatcher_names=[],confirmed=False).save()	
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[session['fbid']],num_matchers=0,matcher_names=[session['name']],nonmatchers=[],num_nonmatchers=0,nonmatcher_names=[],confirmed=False).save()	
 			query = new_match
 		elif session['fbid'] not in query.matchers:
 			query.matchers.append(session['fbid'])
@@ -119,7 +119,7 @@ def acceptMatch():
 	elif request.form.get('result') == 'reject':
 		query = Match.objects(friends__all=[friend1,friend2]).first()
 		if query == None:
-			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,matcher_names=[],nonmatchers=[session['fbid']],num_nonmatchers=1,nonmatcher_names=[session['name']],confirmed=False).save()
+			new_match = Match(friends=[friend1,friend2],friend_names=[friend1name,friend2name],matchers=[],num_matchers=0,matcher_names=[],nonmatchers=[session['fbid']],num_nonmatchers=0,nonmatcher_names=[session['name']],confirmed=False).save()
 			query = new_match		
 		elif session['fbid'] not in query.nonmatchers:
 			query.nonmatchers.append(session['fbid'])
@@ -147,7 +147,7 @@ def acceptMatch():
 		rejectpercent = "No data"
 	else:
 		acceptpercentfloat = int(float(percentquery.num_matchers)/(percentquery.num_nonmatchers+percentquery.num_matchers) * 100)
-		acceptpercent = str(float(percentquery.num_matchers)/(percentquery.num_nonmatchers+percentquery.num_matchers) * 100) + "%"
+		acceptpercent = str(acceptpercentfloat) + "%"
 		rejectpercent = str(100-acceptpercentfloat) + "%"
 
 	new_match={'boy':match_pair[0]['name'],'girl':match_pair[1]['name'],'boypp':getPhoto(match_pair[0]['uid']),
