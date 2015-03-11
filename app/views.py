@@ -10,7 +10,6 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 def get_facebook_token(token=None):
     return session.get('facebook_token')
 
-
 @app.route('/login')
 def login():
 	return facebook.authorize(callback = app.config['APP_DOMAIN']+'oauth_authorized')
