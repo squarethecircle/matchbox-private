@@ -81,7 +81,6 @@ def match():
 							top_matches.append((malefriend, femalefriend))
 						break
 				break
-
 	#return jsonify({'data':top_matches})
 	session['male_friends'] = male_friends
 	session['female_friends'] = female_friends
