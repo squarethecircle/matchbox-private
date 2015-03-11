@@ -23,8 +23,8 @@
 
       <script>
       match_cache = {{match_cache|safe}};
-      acceptpercentage = "0%";
-      rejectpercentage = "0%";
+      acceptpercentage = "No data";
+      rejectpercentage = "No data";
       function upvoteMatch()
       {
         boy=$('#boy').attr('fbid');
@@ -38,6 +38,7 @@
           {
             match_cache=data;
           }); 
+
       }
       function downvoteMatch()
       {
@@ -46,6 +47,8 @@
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
         newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
+        acceptpercentage = match_cache.acceptpercent;
+        rejectpercentage = match_cache.rejectpercent;
         $.post('match', {friend1:boy, friend2:girl,friend1name:friend1name,friend2name:friend2name,result:"reject"}, function(data)
         {
           match_cache=data;
@@ -55,9 +58,9 @@
       {
         showPercentages(acceptpercentage,rejectpercentage);
       }
-
-      $('#upvote').click(upvoteMatch);
-      $('#downvote').click(downvoteMatch);
+      
+      $('#upvote').click(clickedUpvote);
+      $('#downvote').click(clickedDownvote);
       function newMatch(boy,girl,boypp,girlpp,boyid,girlid)
       {
         $("#matchnames").replaceWith('<h1 id="matchnames">'+boy+' and '+girl+'</h1>');
@@ -72,11 +75,57 @@
         $("#rejectpercent").show()
         $("#acceptpercent").replaceWith('<font size="4" color="green" id="acceptpercent">'+acceptpercent+'</font>')
         $("#rejectpercent").replaceWith('<font size="4" color="red" id="rejectpercent">'+rejectpercent+'</font>')
+
+      }
+      function clickedUpvote()
+      {
+        if (first_press_made == false)
+        {
+          showPercents();
+          accepted = true
+          first_press_made = true
+        }
+        else
+        {
+          if (accepted == true)
+          {
+            upvoteMatch();
+            first_press_made = false
+          }
+          else
+          {
+            downvoteMatch();
+            first_press_made = false
+          }
+        }
+      }
+      function clickedDownvote()
+      {
+        if (first_press_made == false)
+        {
+          showPercents();
+          accepted = false
+          first_press_made = true
+        }
+        else
+        {
+          if (accepted == true)
+          {
+            upvoteMatch();
+            first_press_made = false
+          }
+          else
+          {
+            downvoteMatch();
+            first_press_made = false
+          }
+        }
       }
       up_depressed = false;
       down_depressed = false;
       first_press_made = false;
       accepted = true;
+
       $(document).keydown(function(event)
       {
         if ((!(up_depressed || down_depressed)) && (!first_press_made))
