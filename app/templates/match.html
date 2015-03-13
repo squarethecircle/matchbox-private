@@ -10,21 +10,33 @@
 
         <img src="{{ girlpp }}" id="girl" fbid = "{{ girlid }}" alt="{{ girl }}" class="circle" style= "left:20px">
       </div>
-         <input type="image" src="{{url_for('static',filename='img/thumbsdown.png')}}" id="downvote" width = "60" height="60" style = "left:-20px"> <input type="image" src="{{url_for('static',filename='img/thumbsup.png')}}" id="upvote" width = "60" height="60" style="left:20px">
+        <p>
+          <font size="4" color="red" id="rejectpercent">
+            {{ rejectpercent }}
+          </font>
+          <input type="image" src="{{url_for('static',filename='img/thumbsdown.png')}}" id="downvote" width ="60" height="60" style ="left:-20px"> <input type="image" src="{{url_for('static',filename='img/thumbsup.png')}}" id="upvote" width ="60" height="60" style="left:20px"> 
+          <font size="4" color="green" id="acceptpercent">
+            {{ acceptpercent }}
+          </font>
+        </p>
       </div>
 
-
-
       <script>
+      match_cache = {{match_cache|safe}};
+      acceptpercentage = "No data";
+      rejectpercentage = "No data";
       function upvoteMatch()
       {
         boy=$('#boy').attr('fbid');
         girl=$('#girl').attr('fbid');
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
+        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
+        acceptpercentage = match_cache.acceptpercent;
+        rejectpercentage = match_cache.rejectpercent;
         $.post('match', {friend1:boy, friend2:girl, friend1name:friend1name,friend2name:friend2name,result:"accept"}, function(data)
           {
-            newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+            match_cache=data;
           }); 
 
       }
@@ -34,54 +46,131 @@
         girl=$('#girl').attr('fbid');
         friend1name=$('#boy').attr('alt');
         friend2name=$('#girl').attr('alt');
-
+        newMatch(match_cache.boy,match_cache.girl,match_cache.boypp,match_cache.girlpp,match_cache.boyid,match_cache.girlid);
+        acceptpercentage = match_cache.acceptpercent;
+        rejectpercentage = match_cache.rejectpercent;
         $.post('match', {friend1:boy, friend2:girl,friend1name:friend1name,friend2name:friend2name,result:"reject"}, function(data)
         {
-          newMatch(data.boy,data.girl,data.boypp,data.girlpp,data.boyid,data.girlid);
+          match_cache=data;
         }); 
       }
-
-      $('#upvote').click(upvoteMatch);
-      $('#downvote').click(downvoteMatch);
+      function showPercents()
+      {
+        showPercentages(acceptpercentage,rejectpercentage);
+      }
+      
+      $('#upvote').click(clickedUpvote);
+      $('#downvote').click(clickedDownvote);
       function newMatch(boy,girl,boypp,girlpp,boyid,girlid)
       {
         $("#matchnames").replaceWith('<h1 id="matchnames">'+boy+' and '+girl+'</h1>');
         $("#boy").replaceWith('<img src="'+boypp+'" id="boy" fbid="'+boyid+'" alt="'+boy+'" class="circle" style="left:-20px">')
         $("#girl").replaceWith('<img src="'+girlpp+'" id="girl" fbid="'+girlid+'" alt="'+girl+'" class="circle" style="left:20px">')
+        $("#acceptpercent").hide()
+        $("#rejectpercent").hide()
+      }
+      function showPercentages(acceptpercent,rejectpercent)
+      {
+        $("#acceptpercent").show()
+        $("#rejectpercent").show()
+        $("#acceptpercent").replaceWith('<font size="4" color="green" id="acceptpercent">'+acceptpercent+'</font>')
+        $("#rejectpercent").replaceWith('<font size="4" color="red" id="rejectpercent">'+rejectpercent+'</font>')
+
+      }
+      function clickedUpvote()
+      {
+        if (first_press_made == false)
+        {
+          showPercents();
+          accepted = true
+          first_press_made = true
+        }
+        else
+        {
+          if (accepted == true)
+          {
+            upvoteMatch();
+            first_press_made = false
+          }
+          else
+          {
+            downvoteMatch();
+            first_press_made = false
+          }
+        }
+      }
+      function clickedDownvote()
+      {
+        if (first_press_made == false)
+        {
+          showPercents();
+          accepted = false
+          first_press_made = true
+        }
+        else
+        {
+          if (accepted == true)
+          {
+            upvoteMatch();
+            first_press_made = false
+          }
+          else
+          {
+            downvoteMatch();
+            first_press_made = false
+          }
+        }
       }
       up_depressed = false;
-      down_depressed = false
+      down_depressed = false;
+      first_press_made = false;
+      accepted = true;
+
       $(document).keydown(function(event)
       {
-        if (!(up_depressed || down_depressed))
+        if ((!(up_depressed || down_depressed)) && (!first_press_made))
         {
           if (event.which == 38) 
             {
               event.preventDefault();
-              upvoteMatch();
-              up_depressed = true; 
+              accepted = true;
+              showPercents();
+              up_depressed = true;
+              first_press_made = true;
             }
           else if (event.which == 40)
           {
             event.preventDefault();
-            downvoteMatch();
+            accepted = false;
+            showPercents();
             down_depressed = true;
+            first_press_made = true;
+          }
+        }
+        else if (first_press_made)
+        {
+          if (accepted == true)
+          {
+            event.preventDefault();
+            first_press_made = false;
+            up_depressed = true;
+            upvoteMatch();
+          }
+          else if (accepted == false)
+          {
+            event.preventDefault();
+            first_press_made = false;
+            down_depressed = true;
+            downvoteMatch();
           }
         }
         
       });
       $(document).keyup(function(event)
       {
-          if (event.which == 38) 
-          {
-            event.preventDefault();
-            up_depressed = false; 
-          }
-          else if (event.which == 40)
-          {
-            event.preventDefault();
-            down_depressed = false;
-          }
+          event.preventDefault();
+          up_depressed = false;
+          down_depressed = false;
 
       });
       </script>

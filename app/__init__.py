@@ -18,11 +18,12 @@ if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	KVSessionExtension(store, app)
 
 else:
-	app.config['APP_DOMAIN'] = 'http://matchmakingmvp.herokuapp.com/'
+	app.config['APP_DOMAIN'] = 'http://matchboxmvp.herokuapp.com/'
 	connect('matches',host=os.environ['MONGOLAB_URI'])
 	url = urlparse.urlparse(os.environ['REDISCLOUD_URL'])
 	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password))
 	KVSessionExtension(store, app)
+	#app.config['PROPAGATE_EXCEPTIONS'] = True
 
 
 from flask_oauth import OAuth
@@ -35,7 +36,7 @@ facebook = oauth.remote_app('facebook',
     authorize_url='https://www.facebook.com/dialog/oauth',
     consumer_key=os.environ['MATCHMAKING_FB_APP_KEY'],
     consumer_secret=os.environ['MATCHMAKING_FB_APP_SECRET'],
-    request_token_params={'scope': ['email', 'public_profile','user_friends','friends_education_history','friends_relationships']}
+    request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
 
 
