@@ -102,13 +102,15 @@ def match():
 			if malefriend['uid'] == most_upvoted_matches_ids[i][0]:
 				for femalefriend in female_friends:
 					if femalefriend['uid'] == most_upvoted_matches_ids[i][1]:
-						most_upvoted_matches.append((malefriend,femalefriend))
+						if str((malefriend['uid'],femalefriend['uid'])) not in user_obj.seen_top_matches:
+							most_upvoted_matches.append((malefriend,femalefriend))
 						break
 				break
 			if malefriend['uid'] == most_voted_matches_ids[i][0]:
 				for femalefriend in female_friends:
 					if femalefriend['uid'] == most_voted_matches_ids[i][1]:
-						most_voted_matches.append((malefriend,femalefriend))
+						if str((malefriend['uid'],femalefriend['uid'])) not in user_obj.seen_top_matches:
+							most_voted_matches.append((malefriend,femalefriend))
 						break
 				break			
 	#return jsonify({'data':top_matches})
@@ -159,30 +161,39 @@ def acceptMatch():
 	user_obj = User.objects(fbid=session['fbid']).first()
 	user_obj.num_submitted += 1
 	user_obj.save()
-	x = randint(1,16)
+	x = randint(7,16)
 	if (x <= 2) and session['top_matches']:
 		match_pair = (session['top_matches'][randint(0,len(session['top_matches'])-1)])
 		session['top_matches'].remove(match_pair)
 		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
 		user_obj.save()
-	elif x == 3:
+	elif x == 3 and session['lifestyle_male_friends']:
 		match_pair = (session['lifestyle_male_friends'][randint(0,len(session['lifestyle_male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
-	elif x == 4:
+	elif x == 4 and session['lifestyle_female_friends']:
 		match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['lifestyle_female_friends'][randint(0,len(session['lifestyle_female_friends'])-1)])
-	elif x >= 5 and x <= 7 and session['most_upvoted_matches']:
+	elif x >= 5 and x <= 6 and session['most_upvoted_matches']:
 		match_pair = (session['most_upvoted_matches'][randint(0,len(session['most_upvoted_matches'])-1)])
 		session['most_upvoted_matches'].remove(match_pair)
 		if match_pair in session['most_voted_matches']:
 			session['most_voted_matches'].remove(match_pair)
-	elif x >= 8 and x <= 10 and session['most_voted_matches']:
+		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
+		user_obj.save()
+	elif x >= 7 and x <= 8 and session['most_voted_matches']:
 		match_pair = (session['most_voted_matches'][randint(0,len(session['most_voted_matches'])-1)])
-		session['most_voted_matches'].remove(match_pair)
+		#print (session['most_voted_matches'])
+		#print "\n\n"
+		#print match_pair
+		#print "\n\n"
+		#session['most_voted_matches'].remove(match_pair)
+		#print (session['most_voted_matches'])
 		if match_pair in session['most_upvoted_matches']:
 			session['most_upvoted_matches'].remove(match_pair)
+		user_obj.seen_top_matches.append(str((match_pair[0]['uid'],match_pair[1]['uid'])))
+		user_obj.save()
 	else:
 		match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
-	percentquery = Match.objects(friends__all=[str(match_pair[0]['uid']),str(match_pair[1]['uid'])]).first()
 	
+	percentquery = Match.objects(friends__all=[str(match_pair[0]['uid']),str(match_pair[1]['uid'])]).first()
 	if percentquery == None:
 		acceptpercent = "No data"
 		rejectpercent = "No data"
