@@ -130,47 +130,47 @@
 					<div class="message-thread">
 						<div class="message bubble-left">
 							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 						</div>
 						<div class="message bubble-right">
 							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 						</div>
 						<div class="message bubble-left">
 							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 						</div>
 						<div class="message bubble-right">
 							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>:-)</p>
 						</div>
 						<div class="message bubble-left">
 							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 						</div>
 						<div class="message bubble-right">
 							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 						</div>
 						<div class="message bubble-right">
 							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>;-)</p>
 						</div>
 						<div class="message bubble-left">
 							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 						</div>
 						<div class="message bubble-left">
 							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">2 Hours Ago</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
 							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 						</div>
 					</div>
@@ -183,8 +183,26 @@
 		</div>
 	</div>	
 
-  	<script src="js/index.js"></script>
+  	<script>
 
+    enter_depressed = false
+    $(document).keydown(function(event)
+    {
+        if (!enter_depressed)
+        {
+          	if (event.which == 38)
+            {
+              	event.preventDefault();
+              	sendMessage(message);
+              	enter_depressed = true;
+            }
+      	});
+    $(document).keyup(function(event)
+      	{
+          	event.preventDefault();
+          	enter_depressed = false
+      	});
+    </script>
 
 </body>
 
