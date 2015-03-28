@@ -9,7 +9,6 @@ import urlparse
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 
-
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	app.config['APP_DOMAIN'] = 'http://localhost:5000/'
 	connect('matches')
@@ -25,7 +24,6 @@ else:
 	KVSessionExtension(store, app)
 	#app.config['PROPAGATE_EXCEPTIONS'] = True
 
-
 from flask_oauth import OAuth
 import os
 oauth = OAuth()
@@ -38,6 +36,5 @@ facebook = oauth.remote_app('facebook',
     consumer_secret=os.environ['MATCHMAKING_FB_APP_SECRET'],
     request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
-
 
 from app import views
