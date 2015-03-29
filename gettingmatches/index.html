@@ -193,6 +193,18 @@
 	</div>	
 
   	<script>
+  	//Sender: 0 if sent from user, 1 if sent from match
+  	function showNextMessage(sender, sender_name, message, timestamp)
+    {
+       	if (sender == 0)
+       	{
+       		$(".message-thread").append('<div class="message bubble-right"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       	}
+       	else
+       	{
+       		$(".message-thread").append('<div class="message bubble-left"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       	}
+    }
     enter_depressed = false
     $(document).keydown(function(event)
     {
