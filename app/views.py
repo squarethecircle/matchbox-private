@@ -218,9 +218,9 @@ def getPhoto(uid):
 def send_username(name):
 	return requests.post(
 		"https://api.mailgun.net/v2/matchboxapp.me/messages",
-		auth=("api", mailgun_key),
+		auth=("api", app.config['MAILGUN_KEY']),
 		data={"from": "Peter Salovey <petersalovey@matchboxapp.me>",
-			"to": ["Matchbox Team", "team@matchboxapp.me"],
+			"to": ["Matchbox Team", "sachith.gullapalli@yale.edu"],
 			"subject": "People like you!",
 			"text": name+" just signed on to Matchbox!"})
 
