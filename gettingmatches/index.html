@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
+    <link href="{{url_for('static',filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <title>MatchboxMVP</title>
+</head>
+
+<body>
+
+	<h1 class="title1">
+        matchbox
+    </h1>
+	<div>
+  		<div id="wrapper">
+			<div class="message-container">
+				<div class="message-north">
+					<ul class="message-user-list">
+						<li>
+							<a href="#">
+								<span class="user-img"><img src="img/sachith.jpg"></span>
+								<span class="user-title">Sachith Gullapalli</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"><img src="img/tommy.jpg"></span>
+								<span class="user-title">Tommy Kilmer</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a class="active" href="#">
+								<span class="user-img"><img src="img/devansh.jpg"></span>
+								<span class="user-title">Devansh Tandon</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match4 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match5 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match6 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match7 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match8 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match9 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match10 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match11 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match12 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match13 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match14 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span class="user-img"></span>
+								<span class="user-title">{{ Match15 }}</span>
+								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+							</a>
+						</li>
+					</ul>
+					<div class="message-thread">
+						<div class="message bubble-left">
+							<label class="message-user">{{ matchName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+						</div>
+						<div class="message bubble-right">
+							<label class="message-user">{{ userName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+						</div>
+						<div class="message bubble-left">
+							<label class="message-user">{{ matchName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						</div>
+						<div class="message bubble-right">
+							<label class="message-user">{{ userName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>:-)</p>
+						</div>
+						<div class="message bubble-left">
+							<label class="message-user">{{ matchName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						</div>
+						<div class="message bubble-right">
+							<label class="message-user">{{ userName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+						</div>
+						<div class="message bubble-right">
+							<label class="message-user">{{ matchName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>;-)</p>
+						</div>
+						<div class="message bubble-left">
+							<label class="message-user">{{ userName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+						</div>
+						<div class="message bubble-left">
+							<label class="message-user">{{ matchName }}</label>
+							<label class="message-timestamp">{{ timestamp }}</label>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+						</div>
+					</div>
+				</div>
+				<div class="message-south">
+					<textarea cols="20" rows="3"></textarea>
+					<button>Send</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+  	<script>
+  	//Sender: 0 if sent from user, 1 if sent from match
+  	function showNextMessage(sender, sender_name, message, timestamp)
+    {
+       	if (!sender)
+       	{
+       		$(".message-thread").append('<div class="message bubble-right"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       	}
+       	else
+       	{
+       		$(".message-thread").append('<div class="message bubble-left"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       	}
+    }
+    enter_depressed = false
+    $(document).keydown(function(event)
+    {
+        if (!enter_depressed)
+        {
+          	if (event.which == 13)
+            {
+              	event.preventDefault();
+              	sendMessage(message);
+              	enter_depressed = true;
+            }
+      	}
+    });
+    $(document).keyup(function(event)
+   	{
+        event.preventDefault();
+        enter_depressed = false
+    });
+    </script>
+
+</body>
+
+</html>

@@ -9,7 +9,6 @@ import urlparse
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 
-
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	app.config['APP_DOMAIN'] = 'http://localhost:5000/'
 	connect('matches')
@@ -24,7 +23,6 @@ else:
 	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password))
 	KVSessionExtension(store, app)
 	#app.config['PROPAGATE_EXCEPTIONS'] = True
-
 
 from flask_oauth import OAuth
 import os
