@@ -219,7 +219,7 @@ def send_username(name):
 	return requests.post(
 		"https://api.mailgun.net/v2/matchboxapp.me/messages",
 		auth=("api", app.config['MAILGUN_KEY']),
-		data={"from": "Peter Salovey <thomas.kilmer@yale.edu>",
+		data={"from": "Bill Nye <billnye@matchboxapp.me>",
 			"to": ["Matchbox Team", "team@matchboxapp.me"],
 			"subject": "People like you!",
 			"text": name+" just signed on to Matchbox!"})
