@@ -3,6 +3,7 @@ from app import app,models,facebook
 from random import randint
 from models import Match, User
 import json
+import requests
 
 blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666,100005208426975]
 
@@ -37,6 +38,7 @@ def oauth_authorized(resp):
 	if query == None:
 		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
 		new_user.save()	
+	send_username(basic_info['name'])
 	return redirect('/match')
 
 @app.route('/')
@@ -213,4 +215,12 @@ def getPhoto(uid):
 	return photo['uri']
 
 
+def send_username(name):
+	return requests.post(
+		"https://api.mailgun.net/v2/matchboxapp.me/messages",
+		auth=("api", mailgun_key),
+		data={"from": "Peter Salovey <petersalovey@matchboxapp.me>",
+			"to": ["Matchbox Team", "team@matchboxapp.me"],
+			"subject": "People like you!",
+			"text": name+" just signed on to Matchbox!"})
 

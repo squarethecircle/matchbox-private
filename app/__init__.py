@@ -38,6 +38,6 @@ facebook = oauth.remote_app('facebook',
     consumer_secret=os.environ['MATCHMAKING_FB_APP_SECRET'],
     request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
-
+mailgun_key=os.environ['MATCHMAKING_MAILGUN_KEY']
 
 from app import views
