@@ -110,6 +110,7 @@ class MatchboxTestCase(unittest.TestCase):
         
         print models.Match.objects().all()
         print models.Match.objects()[0].friends
+        print models.Match.objects()[0].num_matchers
 
         self.app.post('match', data=test_data_accept)
 
@@ -119,15 +120,17 @@ class MatchboxTestCase(unittest.TestCase):
         assert(name in get_database.matcher_names)
 
 
-    def test_user_in_database(self):
+    def test_user_obj(self):
         with self.app.test_request_context('/match', methods=['POST'], data=test_data_accept):
             user_obj = models.User.objects(fbid=session['fbid']).first()
             assert(user_obj.fbid == session['fbid'])
             assert(user_obj.name == session['name'])
 
-    # def test_get_match(self):
-    #     user_obj = models.User.objects(fbid=session['fbid']).first()
-    #     assert(getWeightedMatch(user_obj))
+    def test_get_match(self):
+        with self.app.test_request_context('/match', methods=['POST'], data=test_data_accept):
+            user_obj = models.User.objects(fbid=session['fbid']).first()
+            match_pair = getWeightedMatch(user_obj)
+            assert(match_pair)
 
     # def test_get_percentages(self):
     #     percent_query = models.Match.objects(friends__all=['100100', '100101']).first()
