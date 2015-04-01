@@ -50,6 +50,12 @@ most_voted_matches = []
 fbid = '1234'
 name = 'Testing'
 
+test_data_accept = {'friend1':'100100', 'friend2':'100101', 
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'}
+
+test_data_reject = {'friend1':'100100', 'friend2':'100101', 
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'}
+
 
 class MatchboxTestCase(unittest.TestCase):
 
@@ -73,15 +79,6 @@ class MatchboxTestCase(unittest.TestCase):
             new_user = models.User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
             new_user.save() 
 
-    def test_user_in_database(self):
-        user_obj = models.User.objects(fbid=session['fbid']).first()
-        assert(user_obj.fbid == session['fbid'])
-        assert(user_obj.name == session['name'])
-
-    def test_get_match(self):
-        user_obj = models.User.objects(fbid=session['fbid']).first()
-        assert(getWeightedMatch(user_obj))
-
     def test_database(self):
         test_match = models.Match(friends=['100100', '100101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         add_database = test_match.save()
@@ -89,13 +86,8 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(add_database.friends == get_database.friends)
 
-    def test_get_percentages(self):
-        percent_query = models.Match.objects(friends__all=['100100', '100101']).first()
-        assert(getPercent(percent_query))
-
     def test_add_accept_match(self):
-        self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
-            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
+        self.app.post('match', data=test_data_accept)
         
         # print models.Match.objects()
         # print models.Match.objects()[0].friends
@@ -104,8 +96,7 @@ class MatchboxTestCase(unittest.TestCase):
         assert(get_database.num_matchers==1)
 
     def test_add_reject_match(self):
-        self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
-            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
+        self.app.post('match', data=test_data_reject)
         
         # print models.Match.objects()
         # print models.Match.objects()[0].friends
@@ -120,13 +111,29 @@ class MatchboxTestCase(unittest.TestCase):
         # print models.Match.objects().all()
         # print models.Match.objects()[0].friends
 
-        self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
-            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
+        self.app.post('match', data=test_data_accept)
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_matchers==2)
         assert(fbid in get_database.matchers)
         assert(name in get_database.matcher_names)
+
+
+    # def test_user_in_database(self):
+    #     with self.app.test_request_context('/match', methods=['POST'], ):
+
+
+    #     user_obj = models.User.objects(fbid=session['fbid']).first()
+    #     assert(user_obj.fbid == session['fbid'])
+    #     assert(user_obj.name == session['name'])
+
+    # def test_get_match(self):
+    #     user_obj = models.User.objects(fbid=session['fbid']).first()
+    #     assert(getWeightedMatch(user_obj))
+
+    # def test_get_percentages(self):
+    #     percent_query = models.Match.objects(friends__all=['100100', '100101']).first()
+    #     assert(getPercent(percent_query))
 
     # TODO: needs some fixing
     # def test_increment_reject_match(self):
