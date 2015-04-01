@@ -70,27 +70,27 @@ class MatchboxTestCase(unittest.TestCase):
             new_user.save() 
 
     def test_database(self):
-        test_match = models.Match(friends=['100100', '100100'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
+        test_match = models.Match(friends=['100100', '100101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         add_database = test_match.save()
 
-        get_database = models.Match.objects(friends__all=['100100', '100100']).first()
+        get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(add_database.friends == get_database.friends)
 
     def test_add_match(self):
-        self.app.post('match', {'friend1':'100100', 'friend2':'100100', 
+        self.app.post('match', {'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
 
-        get_database = models.Match.objects(friends__all=['100100','100100']).first()
+        get_database = models.Match.objects(friends__all=['100100','100101']).first()
         assert(get_database.num_matchers==1)
 
     def test_increment_match(self):
-        test_match = models.Match(friends=['100100', '100100'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
+        test_match = models.Match(friends=['100100', '100101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         add_database = test_match.save()
 
-        self.app.post('match', {'friend1':'100100', 'friend2':'100100', 
+        self.app.post('match', {'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
 
-        get_database = models.Match.object(friends__all=['100100', '100100']).first()
+        get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(get_database.num_matchers==2)
 
     # def tearDown(self):
