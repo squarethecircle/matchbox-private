@@ -1,7 +1,7 @@
 import os
 import unittest
 import tempfile
-import views
+from app import app, views, models
 
 class MatchboxTestCase(unittest.TestCase):
 
@@ -11,10 +11,6 @@ class MatchboxTestCase(unittest.TestCase):
         with self.app as c:
             with c.session_transaction as sess:
                 sess['fbid'] = '12345'
-
-    def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(app.config['DATABASE'])
 
     def test_database(self):
         test_match = Match(friends=['100100', '100100'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=false)
@@ -39,6 +35,10 @@ class MatchboxTestCase(unittest.TestCase):
 
         get_database = Match.object(friends__all=['100100', '100100']).first()
         assert(get_database.num_matchers==2)
+
+    def tearDown(self):
+        os.close(self.db_fd)
+        os.unlink(app.config['DATABASE'])
 
     # def test_session(self):
     #     assert(session['male_friends'])
