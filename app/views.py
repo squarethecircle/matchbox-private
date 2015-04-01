@@ -15,6 +15,7 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 
 @app.route('/chat')
 def chat():
+	newMessage(629263828,774168034,"Hey, what's up?")
 	token=hexlify(urandom(32))
 	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
 	query=Chat.objects(pair__all=[session['fbid']])
