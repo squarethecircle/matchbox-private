@@ -104,6 +104,11 @@ class MatchboxTestCase(unittest.TestCase):
         assert(get_database.num_matchers==2)
 
     def test_percent(self):
+        query = models.User.objects(fbid=session['fbid']).first()
+        if query == None:
+            new_user = models.User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
+            new_user.save()         
+
         match_pair = views.getWeightedMatch(query)
         acceptpercentfloat = views.getPercent(match_pair)
 
