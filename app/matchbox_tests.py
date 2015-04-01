@@ -116,7 +116,7 @@ class MatchboxTestCase(unittest.TestCase):
         assert(name in get_database.matcher_names)
 
     def test_increment_reject_match(self):
-        test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], nonmatchers=['10010001000'], num_nonmatchers=1, nonmatcher_names=['MrMatcher'], matchers=[], num_matchers=0, matcher_names=[], confirmed=False)
+        test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=[], num_matchers=0, matcher_names=[], nonmatchers=['10010001000'], num_nonmatchers=1, nonmatcher_names=['MrMatcher'], confirmed=False)
         test_match.save()
         
         # print models.Match.objects().all()
