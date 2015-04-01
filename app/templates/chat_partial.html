@@ -1,0 +1,15 @@
+<div class="message-thread" id="chatlog" data-user="{{other_fbid}}">
+	{% for message in messages %}
+	{% if message.sender == my_fbid %}
+		<div class="message bubble-right">
+		<label class="message-timestamp">{{view_func(message.sent_time)}}</label>
+		<p>{{message.text}}</p>
+		</div>
+	{% else %}
+		<div class="message bubble-left">
+		<label class="message-timestamp">{{view_func(message.sent_time)}}</label>
+		<p>{{message.text}}</p>
+		</div>
+	{% endif %}
+	{% endfor %}
+</div>

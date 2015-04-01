@@ -15,6 +15,8 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 
 @app.route('/chat')
 def chat():
+	if session.get('facebook_token') is None:
+		return redirect('/index')
 	token=hexlify(urandom(32))
 	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
 	query=Chat.objects(pair__all=[session['fbid']]).order_by('-messages')
@@ -37,6 +39,15 @@ def chat():
 	else:
 		messages=[]
 	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp)
+
+@app.route('/getChat')
+def getChat():
+	query=Chat.objects(pair__all=[session['fbid'],request.args.get('fbid')]).first()
+	if query:
+		messages=query.messages
+	else:
+		messages=[]
+	return render_template('chat_partial.html',my_fbid=session['fbid'],other_fbid=request.args.get('fbid'),chat=query,messages=messages,view_func=getTimeStamp)
 
 def newMessage(sender,receiver,msg):
 	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
