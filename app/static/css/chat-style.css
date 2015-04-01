@@ -263,11 +263,26 @@ h1 {
 	box-shadow: 0px 1px 2px #C6C6C6;
 	cursor: pointer;
 }
+.message-container > .message-south > .reveal {
+	float: left;
+  	color: #000000;
+  	background: #ff3030;
+  	text-decoration: none;
+}
 .message-container > .message-south > button:hover {
 	background: -webkit-linear-gradient(#FFFFFF, #DFDFDF);
 	background:    -moz-linear-gradient(#FFFFFF, #DFDFDF);
 	background:      -o-linear-gradient(#FFFFFF, #DFDFDF);
 	background:         linear-gradient(#FFFFFF, #DFDFDF);
+}
+.message-container > .message-south > .reveal:hover {
+  background: #fa4444;
+  background-image: -webkit-linear-gradient(top, #fa4444, #f02727);
+  background-image: -moz-linear-gradient(top, #fa4444, #f02727);
+  background-image: -ms-linear-gradient(top, #fa4444, #f02727);
+  background-image: -o-linear-gradient(top, #fa4444, #f02727);
+  background-image: linear-gradient(to bottom, #fa4444, #f02727);
+  text-decoration: none;
 }
 .message-container > .message-south > button:active {
 	box-shadow: inset 0px 0px 10px #5A5A5A;
