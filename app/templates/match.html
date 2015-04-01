@@ -25,6 +25,7 @@
       match_cache = {{match_cache|safe}};
       acceptpercentage = "No data";
       rejectpercentage = "No data";
+//The following two functions send the relevant match data to our python functions based on what the user decides.
       function upvoteMatch()
       {
         boy=$('#boy').attr('fbid');
@@ -38,7 +39,6 @@
           {
             match_cache=data;
           }); 
-
       }
       function downvoteMatch()
       {
@@ -58,9 +58,9 @@
       {
         showPercentages(acceptpercentage,rejectpercentage);
       }
-      
       $('#upvote').click(clickedUpvote);
       $('#downvote').click(clickedDownvote);
+//Instead of reloading the page every match, we simple replace the profile pictures and names with those of the next match.
       function newMatch(boy,girl,boypp,girlpp,boyid,girlid)
       {
         $("#matchnames").replaceWith('<h1 id="matchnames">'+boy+' and '+girl+'</h1>');
@@ -77,6 +77,7 @@
         $("#rejectpercent").replaceWith('<font size="4" color="red" id="rejectpercent">'+rejectpercent+'</font>')
 
       }
+//Keep track of which click or button press the user is on, so we know to show the user the percents or the next match.
       function clickedUpvote()
       {
         if (first_press_made == false)
@@ -125,7 +126,7 @@
       down_depressed = false;
       first_press_made = false;
       accepted = true;
-
+//The left and right arrow keys are mapped to reject and accept match respectively. We also prevent continuous matching if either button is held down.
       $(document).keydown(function(event)
       {
         if ((!(up_depressed || down_depressed)) && (!first_press_made))
