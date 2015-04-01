@@ -9,9 +9,9 @@ class MatchboxTestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.app = app.test_client()
         with self.app as c:
-            with c.session_transaction() as sess:
-                sess['fbid'] = '12345'
-                sess['name'] = 'Test User'
+            with c.session_transaction() as session:
+                session['fbid'] = '12345'
+                session['name'] = 'Test User'
 
         query = models.User.objects(fbid=session['fbid']).first()
         if query == None:
