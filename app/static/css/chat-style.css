@@ -104,7 +104,7 @@ h1 {
 }
 .message-container > .message-north {
 	width: 100%;
-	height: 80%;
+	height: 78%;
 
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
@@ -230,11 +230,17 @@ h1 {
 	margin-right: 3px;
 	text-align: right;
 }
-.message-container > .message-south > textarea {
-	width: 100%;
-	height: 65%;
-	padding: 7px 10px;
 
+.message-container > .message-south > .blocker {
+	height: 65%;
+	width: 100%;
+
+}
+.message-container > .message-south > .blocker > textarea {
+	width: 75%;
+	height: 100%;
+	padding: 7px 10px;
+	float: right;
 	outline: none;
 	resize: none;
 	font-size: 13px;
@@ -252,9 +258,9 @@ h1 {
 	background: #FFF;
 }
 .message-container > .message-south > button {
-	display: inline-block;
+	display: block;
 	float: right;
-	margin-top: 0px;
+	margin-top: 10px;
 	height: 35px;
 	width: 80px;
 	color: #000000;
@@ -266,6 +272,22 @@ h1 {
 	box-shadow: 0px 1px 2px #C6C6C6;
 	cursor: pointer;
 }
+.message-container > .message-south > button#reveal {
+	display: block;
+	float: left;
+	margin-top: 10px;
+	height: 35px;
+	width: 80px;
+	color: #000000;
+	background: -webkit-linear-gradient(#F5F5F5, #E9E9E9);
+	background:    -moz-linear-gradient(#F5F5F5, #E9E9E9);
+	background:      -o-linear-gradient(#F5F5F5, #E9E9E9);
+	background:         linear-gradient(#F5F5F5, #E9E9E9);
+	border: 2px solid #CCC;
+	box-shadow: 0px 1px 2px #C6C6C6;
+	cursor: pointer;
+}
+
 .message-container > .message-south > .reveal {
 	float: left;
   	color: #000000;
