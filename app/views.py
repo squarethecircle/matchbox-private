@@ -32,7 +32,11 @@ def chat():
 			desc = chat.messages[-1].text
 		chats.append({'name':name,'fbid':other,'photo':photo,'desc':desc})
 	#return jsonify({'data':query[0].messages})
-	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=query[0].messages,view_func=getTimeStamp)
+	if query:
+		messages=query[0].messages
+	else:
+		messages=[]
+	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp)
 
 def newMessage(sender,receiver,msg):
 	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
