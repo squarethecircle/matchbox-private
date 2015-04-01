@@ -80,9 +80,19 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(add_database.friends == get_database.friends)
 
-    def test_add_match(self):
+    def test_add_accept_match(self):
         self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
+        
+        # print models.Match.objects()
+        # print models.Match.objects()[0].friends
+
+        get_database = models.Match.objects(friends__all=['100100','100101']).first()
+        assert(get_database.num_matchers==1)
+
+    def test_add_reject_match(self):
+        self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
         
         # print models.Match.objects()
         # print models.Match.objects()[0].friends
@@ -103,36 +113,23 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_matchers==2)
 
-    def test_percent(self):
-        query = models.User.objects(fbid=session['fbid']).first()
-        if query == None:
-            new_user = models.User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
-            new_user.save()         
+    # def test_percent(self):
+    #     match_pair = views.getWeightedMatch(query)
+    #     acceptpercentfloat = views.getPercent(match_pair)
 
-        match_pair = views.getWeightedMatch(query)
-        acceptpercentfloat = views.getPercent(match_pair)
+    #     if acceptpercentfloat == None:
+    #         acceptpercent = "No Data"
+    #         rejectpercent = "No Data"
+    #     else:
+    #         acceptpercent = str(acceptpercentfloat) + "%"
+    #         rejectpercent = str(100-acceptpercentfloat) + "%"
 
-        if acceptpercentfloat == None:
-            acceptpercent = "No Data"
-            rejectpercent = "No Data"
-        else:
-            acceptpercent = str(acceptpercentfloat) + "%"
-            rejectpercent = str(100-acceptpercentfloat) + "%"
-
-        assert(acceptpercent)
-        assert(rejectpercent)
+    #     assert(acceptpercent)
+    #     assert(rejectpercent)
 
 
     # def tearDown(self):
     #     os.unlink(app.config['DATABASE'])
-
-    # def test_session(self):
-    #     assert(session['male_friends'])
-    #     assert(session['female_friends'])
-
-    # def test_facebook_query(self):
-    #     assert(session.get('facebook_token'))
-    #     session.get('me')
 
 if __name__ == '__main__':
     unittest.main()
