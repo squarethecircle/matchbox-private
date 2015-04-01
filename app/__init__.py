@@ -5,6 +5,12 @@ from flask_kvsession import KVSessionExtension
 from simplekv.memory.redisstore import RedisStore
 from mongoengine import connect 
 import urlparse
+from gevent import monkey
+from socketio.server import SocketIOServer
+
+monkey.patch_all()
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
@@ -37,5 +43,13 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
 app.config['MAILGUN_KEY']=os.environ['MATCHMAKING_MAILGUN_KEY']
+
+if __name__ == '__main__':
+    SocketIOServer(
+        ('', app.config['PORT']), 
+        app,
+        resource="socket.io").serve_forever()
+
+
 
 from app import views

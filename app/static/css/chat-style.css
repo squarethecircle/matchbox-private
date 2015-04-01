@@ -2,17 +2,7 @@
 	margin: 0;
 	padding: 0;
 }
-body {
-    display: table;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-image: url("yale.jpg");
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
-}
+
 body {
 	font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -140,7 +130,7 @@ h1 {
 .message-container > .message-north > .message-user-list a {
 	display: block;
 	padding: 10px;
-	height: 40px; /*Keep height same as img thumbnail height*/
+	height: 60px; /*Keep height same as img thumbnail height*/
 	text-decoration: none;
 	color: #313131;
 
@@ -168,11 +158,11 @@ h1 {
 }
 .message-container > .message-north > .message-user-list a .user-title {
 	margin-left: 5px;
-	
+	font-size:115%;
 }
 .message-container > .message-north > .message-user-list a .user-desc {
+	font-size:115%;
 	padding-left: 5px;
-	padding-top: 5px;
 	font-size: 12px;
 	color: #5A5A5A;
     white-space: nowrap;
@@ -205,7 +195,7 @@ h1 {
 	        box-sizing: border-box;
 }
 .message-container > .message-north > .message-thread > .message {
-	min-width: 40%;
+	min-width: 1%;
 	max-width: 70%;
 	margin: 5px;
 	margin-bottom: 2%;

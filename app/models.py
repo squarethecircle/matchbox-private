@@ -1,4 +1,5 @@
 from mongoengine import *
+import datetime
 
 class Match(Document):
 	friends = ListField(StringField(max_length=30),required=True)
@@ -16,3 +17,19 @@ class User(Document):
 	name = StringField(max_length=100)
 	seen_top_matches = ListField(StringField(max_length=80))
 	num_submitted = IntField(required=True)
+
+class Message(EmbeddedDocument):
+	sender = StringField(max_length=30)
+	recipient = StringField(max_length=30)
+	text = StringField()
+	sent_time = DateTimeField(default=datetime.datetime.now())
+
+class RevealChoice(EmbeddedDocument):
+	user = StringField(max_length=30)
+	status = BooleanField(default=False)
+
+
+class Chat(Document):
+	pair = ListField(StringField(max_length=30))
+	reveals = ListField(EmbeddedDocumentField(RevealChoice))
+	messages = ListField(EmbeddedDocumentField(Message))

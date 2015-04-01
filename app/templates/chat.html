@@ -1,26 +1,7 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <link rel="stylesheet" href="css/style.css" media="screen" type="text/css" />
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-
-    <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='css/style.css')}}" rel="stylesheet">
-    <link href="{{url_for('static',filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <title>MatchboxMVP</title>
-</head>
-
-<body>
+{% extends "base.html" %}
+{% block content %}
+	<script src="{{url_for('static',filename='js/socket.io.min.js')}}"></script>
+	<link href="{{url_for('static',filename='css/chat-style.css')}}" rel="stylesheet">
 
 	<h1 class="title1">
         matchbox
@@ -32,21 +13,21 @@
 					<ul class="message-user-list">
 						<li>
 							<a href="#">
-								<span class="user-img"><img src="img/sachith.jpg"></span>
+								<span class="user-img"><img src="{{url_for('static',filename='img/sachith.jpg')}}"></span>
 								<span class="user-title">Sachith Gullapalli</span>
 								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 							</a>
 						</li>
 						<li>
 							<a href="#">
-								<span class="user-img"><img src="img/tommy.jpg"></span>
+								<span class="user-img"><img src="{{url_for('static',filename='img/tommy.jpg')}}"></span>
 								<span class="user-title">Tommy Kilmer</span>
 								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 							</a>
 						</li>
 						<li>
 							<a class="active" href="#">
-								<span class="user-img"><img src="img/devansh.jpg"></span>
+								<span class="user-img"><img src="{{url_for('static',filename='img/devansh.jpg')}}"></span>
 								<span class="user-title">Devansh Tandon</span>
 								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
 							</a>
@@ -224,7 +205,4 @@
         enter_depressed = false
     });
     </script>
-
-</body>
-
-</html>
+{% endblock %}
