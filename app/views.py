@@ -234,6 +234,8 @@ def acceptMatch():
 
 #A function to query an appropriately sized and croped profile picture from facebook, that takes the user fbid as a parameter.
 def getPhoto(uid):
+	if app.config['TESTING'] == True:
+		return "testing time - test photo here"
 	photo = facebook.get('fql?q=SELECT%20pic_crop%20from%20profile%20where%20id%3D'+str(uid)).data['data'][0]['pic_crop']
 	return photo['uri']
 
