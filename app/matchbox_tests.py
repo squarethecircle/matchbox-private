@@ -98,11 +98,11 @@ class MatchboxTestCase(unittest.TestCase):
         # print models.Match.objects()[0].friends
 
         get_database = models.Match.objects(friends__all=['100100','100101']).first()
-        assert(get_database.num_matchers==1)
+        assert(get_database.num_nonmatchers==1)
 
     def test_increment_match(self):
         test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
-        add_database = test_match.save()
+        test_match.save()
         
         # print models.Match.objects().all()
         # print models.Match.objects()[0].friends
