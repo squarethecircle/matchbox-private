@@ -29,19 +29,19 @@ female_friends = [{
       "name": "Mrs Test 1", 
       "relationship_status": "", 
       "sex": "female", 
-      "uid": 6514
+      "uid": 65141
     }, 
     {
       "name": "Mrs Test 2", 
       "relationship_status": "In a relationship", 
       "sex": "female", 
-      "uid": 502602860
+      "uid": 5026028601
     }, 
     {
       "name": "Mrs Test 3", 
       "relationship_status": "", 
       "sex": "female", 
-      "uid": 503939168
+      "uid": 5039391681
     }]
 top_matches = []
 most_upvoted_matches = []
@@ -49,7 +49,7 @@ most_voted_matches = []
 
 class MatchboxTestCase(unittest.TestCase):
 
-    def setUp(self):
+    def set_up(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
         with self.app as c:
@@ -98,6 +98,20 @@ class MatchboxTestCase(unittest.TestCase):
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_matchers==2)
+
+    def test_percent(self):
+        match_pair = getWeightedMatch(user_obj)
+        acceptpercentfloat = getPercent(match_pair)
+
+        if acceptpercentfloat == None:
+            acceptpercent = "No Data"
+            rejectpercent = "No Data"
+        else:
+            acceptpercent = str(acceptpercentfloat) + "%"
+            rejectpercent = str(100-acceptpercentfloat) + "%"
+
+        assert(acceptpercent)
+        assert(rejectpercent)
 
 
     # def tearDown(self):
