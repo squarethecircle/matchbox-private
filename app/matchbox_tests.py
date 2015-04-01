@@ -1,7 +1,7 @@
 import os
 import unittest
 import tempfile
-import views.py
+import views
 
 class FlaskrTestCase(unittest.TestCase):
 
