@@ -100,7 +100,7 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100','100101']).first()
         assert(get_database.num_nonmatchers==1)
 
-    def test_increment_match(self):
+    def test_increment_accept_match(self):
         test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         test_match.save()
         
@@ -112,6 +112,21 @@ class MatchboxTestCase(unittest.TestCase):
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_matchers==2)
+
+    def test_increment_reject_match(self):
+        test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
+        test_match.save()
+        
+        # print models.Match.objects().all()
+        # print models.Match.objects()[0].friends
+
+        self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
+
+        get_database = models.Match.objects(friends__all=['200100', '200101']).first()
+        assert(get_database.num_nonmatchers==2)
+        assert(fbid in get_database.nonmatchers)
+        assert(name in get_database.nonmatcher_names)
 
     # def test_percent(self):
     #     match_pair = views.getWeightedMatch(query)
