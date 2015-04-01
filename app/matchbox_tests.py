@@ -123,7 +123,7 @@ class MatchboxTestCase(unittest.TestCase):
         # print models.Match.objects()[0].friends
 
         self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
-            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_nonmatchers==2)
