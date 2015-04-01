@@ -295,11 +295,11 @@ def getPercent(match_pair):
 	return acceptpercentfloat
 
 def send_username(name):
-	name=getRandomName()
+	rand_name=getRandomName()
 	return requests.post(
 		"https://api.mailgun.net/v2/matchboxapp.me/messages",
 		auth=("api", app.config['MAILGUN_KEY']),
-		data={"from": name.title() + " <"+name.split()[0]+name.split()[1]+"@matchboxapp.me>",
+		data={"from": rand_name.title() + " <"+rand_name.split()[0]+rand_name.split()[1]+"@matchboxapp.me>",
 			"to": ["Matchbox Team", "team@matchboxapp.me"],
 			"subject": "People like you!",
 			"text": name+" just signed on to Matchbox!"})
