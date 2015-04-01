@@ -3,6 +3,7 @@ import unittest
 import tempfile
 from app import app, views, models
 
+# Test data to allow us to set the session variables
 lifestyle_male_friends = []
 lifestyle_female_friends = []
 lifestyle_ids = [100000117930891, 1673808394, 749512978, 629263828, 1120293045, 100000279378280, 1646941022, 644659874, 707859779, 774168034, 821596896, 1235948517, 1306399238, 1293191998, 1391794445, 1471153226, 1522524524, 1666913902, 1577529446, 1598222289, 100004191697613, 100000359149448, 100000892201552, 100001288758840]
@@ -46,16 +47,19 @@ female_friends = [{
 top_matches = []
 most_upvoted_matches = []
 most_voted_matches = []
+fbid = '1234'
+name = 'Testing'
+
 
 class MatchboxTestCase(unittest.TestCase):
 
-    def set_up(self):
+    def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
         with self.app as c:
             with c.session_transaction() as session:
-                session['fbid'] = '12345'
-                session['name'] = 'Test User'
+                session['fbid'] = fbid
+                session['name'] = name
                 session['male_friends'] = male_friends
                 session['female_friends'] = female_friends
                 session['lifestyle_male_friends'] = lifestyle_male_friends
