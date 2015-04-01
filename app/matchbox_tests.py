@@ -115,6 +115,11 @@ class MatchboxTestCase(unittest.TestCase):
         self.app.post('match', data=test_data_accept)
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
+
+        print get_database.all()
+        print get_database.friends
+        print get_database.num_matchers
+
         assert(get_database.num_matchers==2)
         assert(fbid in get_database.matchers)
         assert(name in get_database.matcher_names)
