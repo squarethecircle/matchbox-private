@@ -36,9 +36,8 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = Match.object(friends__all=['100100', '100100']).first()
         assert(get_database.num_matchers==2)
 
-    def tearDown(self):
-        os.close(self.db_fd)
-        os.unlink(app.config['DATABASE'])
+    # def tearDown(self):
+    #     os.unlink(app.config['DATABASE'])
 
     # def test_session(self):
     #     assert(session['male_friends'])
