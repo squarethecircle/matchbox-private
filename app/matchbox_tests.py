@@ -104,8 +104,8 @@ class MatchboxTestCase(unittest.TestCase):
         assert(get_database.num_matchers==2)
 
     def test_percent(self):
-        match_pair = getWeightedMatch(query)
-        acceptpercentfloat = getPercent(match_pair)
+        match_pair = views.getWeightedMatch(query)
+        acceptpercentfloat = views.getPercent(match_pair)
 
         if acceptpercentfloat == None:
             acceptpercent = "No Data"
