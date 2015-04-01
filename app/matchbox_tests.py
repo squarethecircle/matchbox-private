@@ -80,6 +80,7 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(add_database.friends == get_database.friends)
 
+    # Adds a test new accepted match to the database and checks that the database was correctly updated
     def test_add_accept_match(self):
         self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
@@ -90,6 +91,7 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100','100101']).first()
         assert(get_database.num_matchers==1)
 
+    # Adds a test new rejected match to the database and checks that the database was correctly updated
     def test_add_reject_match(self):
         self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
@@ -100,6 +102,7 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100','100101']).first()
         assert(get_database.num_nonmatchers==1)
 
+    # Adds a test accepted match to the database (which already contains the match) -- check that updates are made correctly
     def test_increment_accept_match(self):
         test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         test_match.save()
