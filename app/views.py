@@ -1,34 +1,46 @@
-from flask import render_template,session,redirect,url_for,request,flash,jsonify
+from flask import render_template,session,redirect,url_for,request,flash,jsonify,Response
 from socketio import socketio_manage
 from socketio.namespace import BaseNamespace
+from binascii import hexlify
+from socketio.mixins import RoomsMixin
 from app import app,models,facebook
+from os import urandom
 from random import randint
 from models import Match, User, Chat, Message,RevealChoice
 import json
 import requests
-import datetime, random
+import datetime
 
 blacklist = [1598222289,1389627032,100007479487216,100009034776491,100005656264666,100005208426975]
 
 @app.route('/chat')
 def chat():
+	token=hexlify(urandom(32))
+	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
+	query=Chat.objects(pair__all=[session['fbid']])
+	#chats_filtered=[]
+	#for chat in chats:
+	#	if chat.reveals[0].status is False or chat.reveals[1].status is False
+	chats=[]
+	for chat in query:
+		chat.pair.remove(session['fbid'])
+		other=chat.pair[0]
+		name=requests.get('http://graph.facebook.com/'+other).json()['name']
+		photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
+		desc = ""
+		if len(chat.messages) > 0:
+			desc = chat.messages[-1].text
+		chats.append({'name':name,'fbid':other,'photo':photo,'desc':desc})
+	#return jsonify({'data':query[0].messages})
+	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=query[0].messages,view_func=getTimeStamp)
 
-	return render_template('chat.html')
-@app.route('/testarooney')
-def NewMessage():
-	user = session['fbid']
-	will = '629263828'
-	msg = request.args.get('msg')
-	if request.args.get('r') == 1:
-		new_msg = Message(sender=will,recipient=user,text=msg)
-	new_msg = Message(sender=user,recipient=will,text=msg)
-	chat = Chat.objects(pair=[user,will]).first()
+def newMessage(sender,receiver,msg):
+	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
+	chat = Chat.objects(pair__all=[sender,receiver]).first()
 	if chat is None:
-		chat=createChat(user,will)
+		chat=createChat(sender,receiver)
 		chat.save()
 	chat.update(add_to_set__messages=[new_msg])
-	return msg
-
 
 def createChat(user1, user2):
 	reveal1 = RevealChoice(user=user1)
@@ -49,7 +61,7 @@ def getMessages():
 
 @facebook.tokengetter
 def get_facebook_token(token=None):
-    return session.get('facebook_token')
+	return session.get('facebook_token')
 
 @app.route('/login')
 def login():
@@ -59,7 +71,7 @@ def login():
 def logout():
 	session.pop('facebook_token')
 	return redirect('/index')
-   	
+	
 @app.route('/oauth_authorized')
 @facebook.authorized_handler
 def oauth_authorized(resp):
@@ -282,10 +294,11 @@ def getPercent(match_pair):
 
 
 def send_username(name):
+	name=getRandomName()
 	return requests.post(
 		"https://api.mailgun.net/v2/matchboxapp.me/messages",
 		auth=("api", app.config['MAILGUN_KEY']),
-		data={"from": "Bill Nye <billnye@matchboxapp.me>",
+		data={"from": name.title() + " <"+name.split()[0]+name.split()[1]+"@matchboxapp.me>",
 			"to": ["Matchbox Team", "team@matchboxapp.me"],
 			"subject": "People like you!",
 			"text": name+" just signed on to Matchbox!"})
@@ -307,52 +320,79 @@ def getTimeStamp(messagedate):
 
 def getRandomName():
 	adjs = [
-    "autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark",
-    "summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter",
-    "patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue",
-    "billowing", "broken", "cold", "damp", "falling", "frosty", "green",
-    "long", "late", "lingering", "bold", "little", "morning", "muddy", "old",
-    "red", "rough", "still", "small", "sparkling", "throbbing", "shy",
-    "wandering", "withered", "wild", "black", "young", "holy", "solitary",
-    "fragrant", "aged", "snowy", "proud", "floral", "restless", "divine",
-    "polished", "ancient", "purple", "lively", "nameless"
-  	]
-  	nouns = [
-    "waterfall", "river", "breeze", "moon", "rain", "wind", "sea", "morning",
-    "snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn", "glitter",
-    "forest", "hill", "cloud", "meadow", "sun", "glade", "bird", "brook",
-    "butterfly", "bush", "dew", "dust", "field", "fire", "flower", "firefly",
-    "feather", "grass", "haze", "mountain", "night", "pond", "darkness",
-    "snowflake", "silence", "sound", "sky", "shape", "surf", "thunder",
-    "violet", "water", "wildflower", "wave", "water", "resonance", "sun",
-    "wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper",
-    "frog", "smoke", "star"
-  	]
+	"autumn", "hidden", "bitter", "misty", "silent", "empty", "dry", "dark",
+	"summer", "icy", "delicate", "quiet", "white", "cool", "spring", "winter",
+	"patient", "twilight", "dawn", "crimson", "wispy", "weathered", "blue",
+	"billowing", "broken", "cold", "damp", "falling", "frosty", "green",
+	"long", "late", "lingering", "bold", "little", "morning", "muddy", "old",
+	"red", "rough", "still", "small", "sparkling", "throbbing", "shy",
+	"wandering", "withered", "wild", "black", "young", "holy", "solitary",
+	"fragrant", "aged", "snowy", "proud", "floral", "restless", "divine",
+	"polished", "ancient", "purple", "lively", "nameless"
+	]
+	nouns = [
+	"waterfall", "river", "breeze", "moon", "rain", "wind", "sea", "morning",
+	"snow", "lake", "sunset", "pine", "shadow", "leaf", "dawn", "glitter",
+	"forest", "hill", "cloud", "meadow", "sun", "glade", "bird", "brook",
+	"butterfly", "bush", "dew", "dust", "field", "fire", "flower", "firefly",
+	"feather", "grass", "haze", "mountain", "night", "pond", "darkness",
+	"snowflake", "silence", "sound", "sky", "shape", "surf", "thunder",
+	"violet", "water", "wildflower", "wave", "water", "resonance", "sun",
+	"wood", "dream", "cherry", "tree", "fog", "frost", "voice", "paper",
+	"frog", "smoke", "star"
+	]
 	animals = ["adelie", "affenpinscher", "hound", "civet", "elephant", "penguin", "ainu", "akbash", "akita", "malamute", "albatross", "alligator", "dachsbracke", "bulldog","foxhound", "angelfish", "ant", "anteater", "antelope", "appenzeller", "fox", "hare", "wolf", "armadillo", "mist", "shepherd", "terrier", "avocet", "axolotl", "baboon", "camel", "badger", "balinese", "bandicoot", "barb", "barnacle", "barracuda", "basenji", "basking", "bat", "beagle", "bear", "collie", "beaver", "beetle", "bichon", "binturong", "bird", "birman", "bison", "rhinoceros", "bloodhound", "bluetick", "bobcat", "bolognese", "bombay", "bongo", "bonobo", "booby", "orangutan", "boykin", "budgerigar", "budgie", "buffalo", "bullfrog", "bumblebee", "burmese", "butterfly", "fish", "caiman", "lizard", "canaan", "capybara", "caracal", "carolina", "cassowary", "cat", "caterpillar", "catfish", "centipede", "cesky", "fousek", "chameleon", "chamois", "cheetah", "chicken", "chihuahua", "chimpanzee", "chinchilla", "chinook", "chinstrap", "chipmunk", "cichlid", "leopard", "clumber", "coati", "cockroach", "coral", "cottontop", "tamarin", "cougar", "cow", "coyote", "crab", "macaque", "crane", "crocodile", "cuscus", "cuttlefish", "dachshund", "dalmatian", "frog", "deer", "bracke", "dhole", "dingo", "discus", "doberman", "pinscher", "dodo", "dog", "dogo", "argentino", "dolphin", "donkey", "dormouse", "dragonfly", "drever", "duck", "dugong", "dunker", "dusky", "eagle", "gorilla", "echidna", "mau", "emu", "falcon", "fennec", "ferret", "flamingo", "flounder", "fly", "fossa", "frigatebird", "gar", "gecko", "gerbil", "gharial", "gibbon", "giraffe", "goat", "oriole", "retriever", "goose", "gopher", "grasshopper", "greyhound", "grouse", "guppy", "hammerhead", "shark", "hamster", "harrier", "havanese", "hedgehog", "heron", "himalayan", "hippopotamus", "horse", "humboldt", "hummingbird", "hyena", "ibis", "iguana", "impala", "indri", "insect", "setter", "wolfhound", "jackal", "jaguar", "chin", "javanese", "jellyfish", "kakapo", "kangaroo", "kingfisher", "kiwi", "koala", "kudu", "labradoodle", "ladybird", "lemming", "lemur", "liger", "lion", "lionfish", "llama", "lobster", "owl", "lynx","macaw", "magpie", "malayancivet", "maltese", "manatee", "mandrill", "markhor", "mastiff", "mayfly", "meerkat", "millipede", "mole", "molly", "mongoose", "mongrel", "monitor", "monkey", "moorhen", "moose", "eel", "moray", "moth", "mouse", "mule", "neanderthal", "neapolitan", "newfoundland", "newt", "nightingale", "numbat", "ocelot", "octopus", "okapi", "olm", "opossum", "ostrich", "otter", "oyster", "pademelon", "panther", "parrot", "peacock", "pekingese", "pelican", "persian", "pheasant", "pig", "pika", "pike", "piranha", "platypus", "pointer", "poodle", "porcupine", "possum", "prawn", "puffin", "pug", "puma", "marmoset", "pygmy","quail", "quetzal", "quokka", "quoll", "rabbit", "raccoon", "ragdoll", "rat", "rattlesnake", "reindeer", "robin", "rockhopper", "rottweiler", "salamander", "saola", "scorpion", "seahorse", "seal", "serval", "sheep", "shrimp", "siamese", "siberian", "skunk", "sloth", "snail", "snake", "snowshoe", "somali", "sparrow", "dogfish", "sponge", "squid", "squirrel", "starfish", "stickbug", "stingray", "stoat", "swan", "tang", "tapir", "tarsier", "termite", "tetra", "tiffany", "tiger", "tortoise", "toucan", "tropicbird", "tuatara", "turkey", "uakari", "uguisu", "umbrellabird", "vulture", "wallaby", "walrus", "warthog", "wasp", "weasel", "whippet", "wildebeest", "wolverine", "wombat", "woodlouse", "woodpecker", "wrasse", "yak", "yorkie", "yorkiepoo", "zebra", "zebu", "zonkey", "zorse"]
-	return adjs[random.randint(0, len(adjs)-1)] + " " + animals[random.randint(0, len(animals)-1)]
+	return adjs[randint(0, len(adjs)-1)] + " " + animals[randint(0, len(animals)-1)]
 
+class ChatNamespace(BaseNamespace,RoomsMixin):
+	def initialize(self):
+		self.room="NULL"
+		self.logger = app.logger
+		self.log("Socketio session started")
 
-class ChatNamespace(BaseNamespace):
-    def initialize(self):
-        self.logger = application.logger
-        self.log("Socketio session started")
+	def log(self, message):
+		self.logger.info("[{0}] [{2}] {1}".format(self.socket.sessid, message,self.room))
 
-    def log(self, message):
-        self.logger.info("[{0}] {1}".format(self.socket.sessid, message))
+	def recv_connect(self):
+		self.log("New connection")
 
-    def recv_connect(self):
-        self.log("New connection")
+	def on_join(self,token):
+		self.log('got token: %s' % token)
+		user=User.objects(chat_token=token).first()
+		self.room=user.fbid
+		self.join(user.fbid)
+		return True
 
-    def recv_disconnect(self):
-        self.log("Client disconnected")
+	def recv_disconnect(self):
+		self.log("Client disconnected")
 
+	def emit_to_room(self, room, event, *args):
+		"""This is sent to all in the room (in this particular Namespace)"""
+		pkt = dict(type="event",
+				   name=event,
+				   args=args,
+				   endpoint=self.ns_name)
+		room_name = self._get_room_name(room)
+		for sessid, socket in self.socket.server.sockets.iteritems():
+			if 'rooms' not in socket.session:
+				continue
+			if room_name in socket.session['rooms']:
+				socket.send_packet(pkt)
 
+	def on_message(self, message):
+		self.log('got a message: %s' % message)
+		newMessage(self.room,message['recipient'],message['text'])
+		self.emit_to_room(self.room,'message',message['recipient'],message['text'],0)
+		self.emit_to_room(message['recipient'],'message',self.room,message['recipient'],1)
+		return True, message
+
+		
 @app.route('/socket.io/<path:remaining>')
 def socketio(remaining):
-    try:
-        socketio_manage(request.environ, {'/chat': ChatNamespace}, request)
-    except:
-        application.logger.error("Exception while handling socketio connection",
-                         exc_info=True)
-    return Response()
+	try:
+		socketio_manage(request.environ, {'/chat': ChatNamespace}, request)
+	except:
+		app.logger.error("Exception while handling socketio connection",
+						 exc_info=True)
+	return Response()
 

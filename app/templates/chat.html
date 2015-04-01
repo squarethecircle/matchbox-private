@@ -11,198 +11,106 @@
 			<div class="message-container">
 				<div class="message-north">
 					<ul class="message-user-list">
-						<li>
+						{% for chatter in chats %}
+						<li id="user-{{chatter.fbid}}">
 							<a href="#">
-								<span class="user-img"><img src="{{url_for('static',filename='img/sachith.jpg')}}"></span>
-								<span class="user-title">Sachith Gullapalli</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
+								<span class="user-img"><img src="{{chatter.photo}}"></span>
+								<span class="user-title">{{chatter.name}}</span>
+								<p class="user-desc">{{chatter.desc}}</p>
 							</a>
 						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"><img src="{{url_for('static',filename='img/tommy.jpg')}}"></span>
-								<span class="user-title">Tommy Kilmer</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a class="active" href="#">
-								<span class="user-img"><img src="{{url_for('static',filename='img/devansh.jpg')}}"></span>
-								<span class="user-title">Devansh Tandon</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match4 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match5 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match6 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match7 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match8 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match9 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match10 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match11 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match12 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match13 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match14 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span class="user-img"></span>
-								<span class="user-title">{{ Match15 }}</span>
-								<p class="user-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-							</a>
-						</li>
+						{% endfor %}
 					</ul>
-					<div class="message-thread">
-						<div class="message bubble-left">
-							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-						</div>
-						<div class="message bubble-right">
-							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-						</div>
-						<div class="message bubble-left">
-							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
-						<div class="message bubble-right">
-							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>:-)</p>
-						</div>
-						<div class="message bubble-left">
-							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
-						<div class="message bubble-right">
-							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-						</div>
-						<div class="message bubble-right">
-							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>;-)</p>
-						</div>
-						<div class="message bubble-left">
-							<label class="message-user">{{ userName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam feugiat nunc ut nibh interdum tempus. Donec at lorem eget sapien iaculis porttitor id quis ligula feugiat nunc ut nibh justo eget elit aliquet interdum tempus.</p>
-						</div>
-						<div class="message bubble-left">
-							<label class="message-user">{{ matchName }}</label>
-							<label class="message-timestamp">{{ timestamp }}</label>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-						</div>
+					<div class="message-thread" id="chatlog" data-user="{{chats[0].fbid}}">
+						{% for message in messages %}
+						{% if message.sender == my_fbid %}
+							<div class="message bubble-right">
+							<label class="message-timestamp">{{view_func(message.sent_time)}}</label>
+							<p>{{message.text}}</p>
+							</div>
+						{% else %}
+							<div class="message bubble-left">
+							<label class="message-timestamp">{{view_func(message.sent_time)}}</label>
+							<p>{{message.text}}</p>
+							</div>
+						{% endif %}
+						{% endfor %}
 					</div>
 				</div>
 				<div class="message-south">
-					<textarea cols="20" rows="3"></textarea>
-					<button>Send</button>
+					<textarea cols="20" rows="3" id="message"></textarea>
+					<button id="send">Send</button>
 				</div>
 			</div>
 		</div>
 	</div>	
 
   	<script>
+  	var objDiv = document.getElementById("chatlog");
+	objDiv.scrollTop = objDiv.scrollHeight;
+  	var token = "{{token}}";
+  	
+    console.log("Welcome to Chatzilla");
+    var socket = io.connect('/chat');
+    socket.on('connect', function () {
+        socket.emit('join', token);
+    });
+
+    socket.on('message', function(other,text,direction){
+    	console.log("Got message!");
+    	current=$("#chatlog").attr("data-user");
+    	if (direction == 0 && other == current)
+    	{
+    		showNextMessage(0,text);
+    	}
+    	if (direction == 1 && other == current){
+        	showNextMessage(1,text);
+    	}
+    	$("#user-"+other).find(".user-desc").html(text);
+      	var objDiv = document.getElementById("chatlog");
+		objDiv.scrollTop = objDiv.scrollHeight;
+
+
+    });
   	//Sender: 0 if sent from user, 1 if sent from match
-  	function showNextMessage(sender, sender_name, message, timestamp)
+
+  	function showNextMessage(sender, message)
     {
        	if (!sender)
        	{
-       		$(".message-thread").append('<div class="message bubble-right"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       		$(".message-thread").append('<div class="message bubble-right"><p>'+message+'</p> </div>');
        	}
        	else
        	{
-       		$(".message-thread").append('<div class="message bubble-left"> <label class="message-user">'+sender_name+'</label> <label class="message-timestamp">'+timestamp+'</label> <p>'+message+'</p> </div>');
+       		$(".message-thread").append('<div class="message bubble-left"><p>'+message+'</p> </div>');
        	}
     }
-    enter_depressed = false
-    $(document).keydown(function(event)
+
+    enter_depressed = false;
+    function sendMessage()
+    {	if ($("#message").val() == "") return;
+	    current=$("#chatlog").attr("data-user");
+	  	message={text:$("#message").val(),recipient:current}
+		socket.emit('message',message);
+		$("#message").val("");
+    }
+    $("#send").click(sendMessage);
+    $("#message").keydown(function(event)
     {
         if (!enter_depressed)
-        {
+        {	
           	if (event.which == 13)
             {
               	event.preventDefault();
-              	sendMessage(message);
               	enter_depressed = true;
+              	sendMessage();
             }
       	}
     });
-    $(document).keyup(function(event)
+    $("#message").keyup(function(event)
    	{
         event.preventDefault();
-        enter_depressed = false
+        enter_depressed = false;
     });
     </script>
 {% endblock %}
