@@ -21,7 +21,7 @@ male_friends = [{
     }, 
     {
       "name": "Mr Test 3", 
-      "relationship_status": null, 
+      "relationship_status": "", 
       "sex": "male", 
       "uid": 503939168
     }]
@@ -39,7 +39,7 @@ female_friends = [{
     }, 
     {
       "name": "Mrs Test 3", 
-      "relationship_status": null, 
+      "relationship_status": "", 
       "sex": "female", 
       "uid": 503939168
     }]
