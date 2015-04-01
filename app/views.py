@@ -385,7 +385,7 @@ class ChatNamespace(BaseNamespace,RoomsMixin):
 		self.log('got a message: %s' % message)
 		newMessage(self.room,message['recipient'],message['text'])
 		self.emit_to_room(self.room,'message',message['recipient'],message['text'],0)
-		self.emit_to_room(message['recipient'],'message',self.room,message['recipient'],1)
+		self.emit_to_room(message['recipient'],'message',self.room,message['text'],1)
 		return True, message
 @app.route('/socket.io/<path:remaining>')
 def socketio(remaining):
