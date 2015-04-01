@@ -17,7 +17,7 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 def chat():
 	token=hexlify(urandom(32))
 	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
-	query=Chat.objects(pair__all=[session['fbid']])
+	query=Chat.objects(pair__all=[session['fbid']]).order_by('-messages')
 	#chats_filtered=[]
 	#for chat in chats:
 	#	if chat.reveals[0].status is False or chat.reveals[1].status is False
