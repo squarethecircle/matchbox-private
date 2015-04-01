@@ -1,0 +1,20 @@
+language: python
+cache: pip
+
+python:
+  - "2.7"
+
+services:
+  - mongodb
+  - redis-server
+
+env:
+  - FLASK=0.10.1
+
+# command to install dependencies
+install: "pip install -r requirements.txt"
+# command to run tests
+script: nosetests
+
+notifications:
+  email: false
