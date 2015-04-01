@@ -9,7 +9,7 @@ class MatchboxTestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.app = app.test_client()
         with self.app as c:
-            with c.session_transaction as sess:
+            with c.session_transaction() as sess:
                 sess['fbid'] = '12345'
 
     def test_database(self):
