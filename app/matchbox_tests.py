@@ -77,7 +77,7 @@ class MatchboxTestCase(unittest.TestCase):
         assert(add_database.friends == get_database.friends)
 
     def test_add_match(self):
-        self.app.post('match', {'friend1':'100100', 'friend2':'100101', 
+        self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
         
         print models.Match.objects()
@@ -93,7 +93,7 @@ class MatchboxTestCase(unittest.TestCase):
         print models.Match.objects().all()
         print models.Match.objects()[0].friends
 
-        self.app.post('match', {'friend1':'200100', 'friend2':'200101', 
+        self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
