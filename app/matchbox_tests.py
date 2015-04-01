@@ -12,9 +12,10 @@ class MatchboxTestCase(unittest.TestCase):
             with c.session_transaction() as sess:
                 sess['fbid'] = '12345'
                 sess['name'] = 'Test User'
-        query = User.objects(fbid=session['fbid']).first()
+
+        query = models.User.objects(fbid=session['fbid']).first()
         if query == None:
-            new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
+            new_user = models.User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
             new_user.save() 
 
     def test_database(self):
