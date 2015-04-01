@@ -108,8 +108,8 @@ class MatchboxTestCase(unittest.TestCase):
         test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         test_match.save()
         
-        # print models.Match.objects().all()
-        # print models.Match.objects()[0].friends
+        print models.Match.objects().all()
+        print models.Match.objects()[0].friends
 
         self.app.post('match', data=test_data_accept)
 
@@ -119,13 +119,11 @@ class MatchboxTestCase(unittest.TestCase):
         assert(name in get_database.matcher_names)
 
 
-    # def test_user_in_database(self):
-    #     with self.app.test_request_context('/match', methods=['POST'], ):
-
-
-    #     user_obj = models.User.objects(fbid=session['fbid']).first()
-    #     assert(user_obj.fbid == session['fbid'])
-    #     assert(user_obj.name == session['name'])
+    def test_user_in_database(self):
+        with self.app.test_request_context('/match', methods=['POST'], data=test_data_accept):
+            user_obj = models.User.objects(fbid=session['fbid']).first()
+            assert(user_obj.fbid == session['fbid'])
+            assert(user_obj.name == session['name'])
 
     # def test_get_match(self):
     #     user_obj = models.User.objects(fbid=session['fbid']).first()
