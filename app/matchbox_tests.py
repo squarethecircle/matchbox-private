@@ -11,6 +11,11 @@ class MatchboxTestCase(unittest.TestCase):
         with self.app as c:
             with c.session_transaction() as sess:
                 sess['fbid'] = '12345'
+                sess['name'] = 'Test User'
+        query = User.objects(fbid=session['fbid']).first()
+        if query == None:
+            new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
+            new_user.save() 
 
     def test_database(self):
         test_match = models.Match(friends=['100100', '100100'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
