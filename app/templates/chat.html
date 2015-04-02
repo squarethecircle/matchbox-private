@@ -21,8 +21,7 @@
 						</li>
 						{% endfor %}
 					</ul>
-          {% if chats %}
-					<div class="message-thread" id="chatlog" data-user="{{chats[0].fbid}}">
+					<div class="message-thread" id="chatlog" {% if chats %}data-user="{{chats[0].fbid}}"{% endif %}>
 						{% for message in messages %}
 						{% if message.sender == my_fbid %}
 							<div class="message bubble-right">
@@ -37,7 +36,7 @@
 						{% endif %}
 						{% endfor %}
 					</div>
-          {% endif %}
+          
 				</div>
 				<div class="message-south">
 					<div class="blocker"><textarea cols="20" rows="3" id="message"></textarea></div>
