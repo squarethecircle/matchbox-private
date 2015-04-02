@@ -38,7 +38,8 @@ def chat():
 		messages=query[0].messages
 	else:
 		messages=[]
-	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp)
+	twenty_minutes = datetime.timedelta(minutes=20)
+	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp,twenty_minutes=twenty_minutes)
 
 @app.route('/getChat')
 def getChat():
@@ -105,7 +106,7 @@ def oauth_authorized(resp):
 	if query == None:
 		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
 		new_user.save()	
-	send_username(basic_info['name'])
+	#send_username(basic_info['name'])
 	return redirect('/match')
 
 @app.route('/')

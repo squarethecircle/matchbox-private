@@ -147,8 +147,6 @@ h1 {
 	     -o-transition: all ease .2s;
 	        transition: all ease .2s;
 }
-
-
 .message-container > .message-north > .message-user-list a:hover {
 	background: #9E9E9E;
 
@@ -217,7 +215,7 @@ h1 {
 .message-container > .message-north > .message-thread > .message {
 	min-width: 1%;
 	max-width: 70%;
-	margin: 5px;
+	margin: 1px;
 	margin-bottom: 2%;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
