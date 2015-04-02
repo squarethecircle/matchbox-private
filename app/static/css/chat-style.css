@@ -214,8 +214,8 @@ h1 {
 
 .message-container > .message-north > .message-thread > .message {
 	min-width: 1%;
-	max-width: 70%;
-	margin: 1px;
+	max-width: 95%;
+	margin: 5px;
 	margin-bottom: 2%;
 	padding: 3px 5px 3px 5px;
 	cursor: pointer;
