@@ -248,6 +248,7 @@ h1 {
 	color: #696969;
 	font-weight: bold;
 	float: center;
+	text-align: center;
 }
 .message-container > .message-north > .message-thread > .message label {
 	margin-top: -13px;
