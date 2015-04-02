@@ -294,6 +294,7 @@ def getWeightedMatch(user_obj):
 		user_obj.save()
 	else:
 		match_pair = (session['male_friends'][randint(0,len(session['male_friends'])-1)],session['female_friends'][randint(0,len(session['female_friends'])-1)])
+	session.modified=True
 	return match_pair
 
 # A function to query the percent upvoted for any given match.
