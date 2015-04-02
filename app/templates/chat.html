@@ -23,6 +23,11 @@
 					</ul>
 					<div class="message-thread" id="chatlog" {% if chats %}data-user="{{chats[0].fbid}}"{% endif %}>
 						{% for message in messages %}
+            {% if loop.first or message.sent_time - last_message_time > twenty_minutes %}
+              <div class="message time-stamp">
+              <p>{{ view_func(message.sent_time) }}</p>
+              </div>
+            {% endif %}
 						{% if message.sender == my_fbid %}
 							<div class="message bubble-right">
 							<label class="message-timestamp">{{view_func(message.sent_time)}}</label>
@@ -41,7 +46,7 @@
 				<div class="message-south">
 					<div class="blocker"><textarea cols="20" rows="3" id="message"></textarea></div>
 					<button id="send">Send</button>
-					<button id="reveal">Reveal!</button>
+					
 				</div>
 			</div>
 		</div>
