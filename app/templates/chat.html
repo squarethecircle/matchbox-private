@@ -23,9 +23,6 @@
 					</ul>
 					<div class="message-thread" id="chatlog" {% if chats %}data-user="{{chats[0].fbid}}"{% endif %}>
 						{% for message in messages %}
-            {% if last_message_time is none %}
-              {% set last_message_time = message.sent_time %}
-            {% endif %}
             {% if last_message_time - message.sent_time > datetime.timedelta(minutes=20) %}
               <div class="message1 time-stamp">
               <p>{{view_func(message.sent_time)}}</p>
