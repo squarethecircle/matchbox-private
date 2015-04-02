@@ -316,19 +316,28 @@ def send_username(name):
 			"text": name+" just signed on to Matchbox!"})
 
 # A function to generate the amount of time that has elasped since a message was sent, to be displayed to the user.
-def getTimeStamp(messagedate):
-	now = datetime.datetime.now()
-	timeElapsed = now - messagedate
-	if timeElapsed > datetime.timedelta(days=3):
-		return "%s/%s/%s at %s:%s" % (messagedate.month, messagedate.day, messagedate.year, messagedate.hour, messagedate.minute)
-	elif timeElapsed > datetime.timedelta(days=1):
-		return str(int(datetime.timedelta.total_seconds(timeElapsed) // 86400)) + " Days Ago"
-	elif timeElapsed > datetime.timedelta(hours=1):
-		return str(int(datetime.timedelta.total_seconds(timeElapsed) // 3600)) + " Hours Ago"
-	elif timeElapsed > datetime.timedelta(minutes=1):
-		return str(int(datetime.timedelta.total_seconds(timeElapsed) // 60)) + " Minutes Ago"
-	else:
-		return "Just Now"
+def getTimeStamp(value):
+    """
+    Finds the difference between the datetime value given and now()
+    and returns appropriate humanize form
+    """
+    from datetime import datetime
+ 
+    if isinstance(value, datetime):
+        delta = datetime.now() - value
+        if delta.days > 6:
+            return value.strftime("%b %d")                    # May 15
+        if delta.days > 1:
+            return value.strftime("%A")                       # Wednesday
+        elif delta.days == 1:
+            return 'yesterday'                                # yesterday
+        elif delta.seconds > 3600:
+            return str(delta.seconds / 3600 ) + ' hours ago'  # 3 hours ago
+        elif delta.seconds >  120:
+            return str(delta.seconds/60) + ' minutes ago'     # 29 minutes ago
+        else:
+            return 'a moment ago'                             # a moment ago
+
 
 # A function to generate random names for anonymous matches, so that users can differentiate between their chats.
 def getRandomName():
