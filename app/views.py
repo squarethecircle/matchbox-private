@@ -27,8 +27,13 @@ def chat():
 	for chat in query:
 		chat.pair.remove(session['fbid'])
 		other=chat.pair[0]
-		name=requests.get('http://graph.facebook.com/'+other).json()['name']
-		photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
+		name=getRandomName()
+		if requests.get('http://graph.facebook.com/'+other).json()['gender'] == "male":
+			photo="static/img/male1.jpg"
+		else:
+			photo="static/img/female.jpg"
+		#name=requests.get('http://graph.facebook.com/'+other).json()['name']
+		#photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
 		desc = ""
 		if len(chat.messages) > 0:
 			desc = chat.messages[-1].text
@@ -106,7 +111,7 @@ def oauth_authorized(resp):
 	if query == None:
 		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
 		new_user.save()	
-	#send_username(basic_info['name'])
+	send_username(basic_info['name'])
 	return redirect('/match')
 
 @app.route('/')
