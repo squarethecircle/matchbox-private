@@ -3,6 +3,7 @@ import unittest
 import tempfile
 from app import app, views, models
 
+# Test data to allow us to set the session variables
 lifestyle_male_friends = []
 lifestyle_female_friends = []
 lifestyle_ids = [100000117930891, 1673808394, 749512978, 629263828, 1120293045, 100000279378280, 1646941022, 644659874, 707859779, 774168034, 821596896, 1235948517, 1306399238, 1293191998, 1391794445, 1471153226, 1522524524, 1666913902, 1577529446, 1598222289, 100004191697613, 100000359149448, 100000892201552, 100001288758840]
@@ -29,23 +30,26 @@ female_friends = [{
       "name": "Mrs Test 1", 
       "relationship_status": "", 
       "sex": "female", 
-      "uid": 6514
+      "uid": 65141
     }, 
     {
       "name": "Mrs Test 2", 
       "relationship_status": "In a relationship", 
       "sex": "female", 
-      "uid": 502602860
+      "uid": 5026028601
     }, 
     {
       "name": "Mrs Test 3", 
       "relationship_status": "", 
       "sex": "female", 
-      "uid": 503939168
+      "uid": 5039391681
     }]
 top_matches = []
 most_upvoted_matches = []
 most_voted_matches = []
+fbid = '1234'
+name = 'Testing'
+
 
 class MatchboxTestCase(unittest.TestCase):
 
@@ -54,8 +58,8 @@ class MatchboxTestCase(unittest.TestCase):
         self.app = app.test_client()
         with self.app as c:
             with c.session_transaction() as session:
-                session['fbid'] = '12345'
-                session['name'] = 'Test User'
+                session['fbid'] = fbid
+                session['name'] = name
                 session['male_friends'] = male_friends
                 session['female_friends'] = female_friends
                 session['lifestyle_male_friends'] = lifestyle_male_friends
@@ -76,40 +80,69 @@ class MatchboxTestCase(unittest.TestCase):
         get_database = models.Match.objects(friends__all=['100100', '100101']).first()
         assert(add_database.friends == get_database.friends)
 
-    def test_add_match(self):
+    # Adds a test new accepted match to the database and checks that the database was correctly updated
+    def test_add_accept_match(self):
         self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
-        
-        # print models.Match.objects()
-        # print models.Match.objects()[0].friends
 
         get_database = models.Match.objects(friends__all=['100100','100101']).first()
         assert(get_database.num_matchers==1)
 
-    def test_increment_match(self):
+    # Adds a test new rejected match to the database and checks that the database was correctly updated
+    def test_add_reject_match(self):
+        self.app.post('match', data={'friend1':'100100', 'friend2':'100101', 
+            'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
+
+        get_database = models.Match.objects(friends__all=['100100','100101']).first()
+        assert(get_database.num_nonmatchers==1)
+
+    # Adds a test accepted match to the database (which already contains the match) -- check that updates are made correctly
+    def test_increment_accept_match(self):
         test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
-        add_database = test_match.save()
-        
-        # print models.Match.objects().all()
-        # print models.Match.objects()[0].friends
+        test_match.save()
 
         self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
             'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'accept'})
 
         get_database = models.Match.objects(friends__all=['200100', '200101']).first()
         assert(get_database.num_matchers==2)
+        assert(fbid in get_database.matchers)
+        assert(name in get_database.matcher_names)
+
+    # TODO: needs some fixing
+    # def test_increment_reject_match(self):
+    #     test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=[], num_matchers=0, matcher_names=[], nonmatchers=['10010001000'], num_nonmatchers=1, nonmatcher_names=['MrMatcher'], confirmed=False)
+    #     test_match.save()
+        
+    #     # print models.Match.objects().all()
+    #     # print models.Match.objects()[0].friends
+
+    #     self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
+    #         'friend1name':'MrTester', 'friend2name':'MrsTester', 'result':'reject'})
+
+    #     get_database = models.Match.objects(friends__all=['200100', '200101']).first()
+    #     assert(get_database.num_nonmatchers==2)
+    #     assert(fbid in get_database.nonmatchers)
+    #     assert(name in get_database.nonmatcher_names)
+
+
+    # def test_percent(self):
+    #     match_pair = views.getWeightedMatch(query)
+    #     acceptpercentfloat = views.getPercent(match_pair)
+
+    #     if acceptpercentfloat == None:
+    #         acceptpercent = "No Data"
+    #         rejectpercent = "No Data"
+    #     else:
+    #         acceptpercent = str(acceptpercentfloat) + "%"
+    #         rejectpercent = str(100-acceptpercentfloat) + "%"
+
+    #     assert(acceptpercent)
+    #     assert(rejectpercent)
 
 
     # def tearDown(self):
     #     os.unlink(app.config['DATABASE'])
-
-    # def test_session(self):
-    #     assert(session['male_friends'])
-    #     assert(session['female_friends'])
-
-    # def test_facebook_query(self):
-    #     assert(session.get('facebook_token'))
-    #     session.get('me')
 
 if __name__ == '__main__':
     unittest.main()
