@@ -45,7 +45,7 @@ def chat():
 		desc = ""
 		if len(chat.messages) > 0:
 			desc = chat.messages[-1].text
-		chats.append({'name':name,'fbid':other,'photo':photo,'desc':desc})
+		chats.append({'name':name,'fbid':other,'photo':photo,'desc':desc,'status':my_reveals.status})
 	#return jsonify({'data':query[0].messages})
 	if query:
 		messages=query[0].messages
@@ -72,9 +72,10 @@ def newMessage(sender,receiver,msg):
 	chat.update(add_to_set__messages=[new_msg])
 
 def createChat(user1, user2):
-	reveal1 = RevealChoice(user=user1,fake_user=getRandomName())
-	reveal2 = RevealChoice(user=user2,fake_user=getRandomName())
+	reveal1 = RevealChoice(user=user1,fake_user=getRandomName().title())
+	reveal2 = RevealChoice(user=user2,fake_user=getRandomName().title())
 	new_chat = Chat(pair=[user1,user2],reveals=[reveal1,reveal2])
+	new_chat.save()
 	return new_chat
 
 @app.route('/reveal',methods=['POST'])
@@ -95,6 +96,7 @@ def changeStatus():
 	elif status == "0":
 		my_reveals.status=False
 		chat.save()
+	return "Success"
 
 
 @app.route('/retrieveMessages')
