@@ -51,8 +51,7 @@ def chat():
 		messages=query[0].messages
 	else:
 		messages=[]
-	twenty_minutes = datetime.timedelta(minutes=20)
-	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp,twenty_minutes=twenty_minutes)
+	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
 
 @app.route('/getChat')
 def getChat():
@@ -61,7 +60,7 @@ def getChat():
 		messages=query.messages
 	else:
 		messages=[]
-	return render_template('chat_partial.html',my_fbid=session['fbid'],other_fbid=request.args.get('fbid'),chat=query,messages=messages,view_func=getTimeStamp)
+	return render_template('chat_partial.html',my_fbid=session['fbid'],other_fbid=request.args.get('fbid'),chat=query,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
 
 def newMessage(sender,receiver,msg):
 	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
