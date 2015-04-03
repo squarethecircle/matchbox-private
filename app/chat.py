@@ -4,6 +4,7 @@ from os import urandom
 from app import app,models,facebook
 from models import User, Chat, Message,RevealChoice
 import datetime
+from random import randint
 import requests
 
 @app.route('/chat')
