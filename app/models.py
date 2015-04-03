@@ -25,7 +25,8 @@ class Message(EmbeddedDocument):
 	sent_time = DateTimeField()
 
 class RevealChoice(EmbeddedDocument):
-	user = StringField(max_length=30)
+	user = StringField(max_length=30,required=True)
+	fake_user = StringField(required=True)
 	status = BooleanField(default=False)
 
 

@@ -16,7 +16,7 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 @app.route('/chat')
 def chat():
 	if session.get('facebook_token') is None:
-		return redirect('/index')
+		return redirect('/login?next=%2Fchat')
 	token=hexlify(urandom(32))
 	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
 	query=Chat.objects(pair__all=[session['fbid']]).order_by('-messages')
@@ -27,13 +27,21 @@ def chat():
 	for chat in query:
 		chat.pair.remove(session['fbid'])
 		other=chat.pair[0]
-		name=getRandomName()
-		if requests.get('http://graph.facebook.com/'+other).json()['gender'] == "male":
-			photo="static/img/male1.jpg"
+		if chat.reveals[0].user == session['fbid']:
+			my_reveals=chat.reveals[0]
+			other_reveals=chat.reveals[1]
 		else:
-			photo="static/img/female.jpg"
-		#name=requests.get('http://graph.facebook.com/'+other).json()['name']
-		#photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
+			my_reveals=chat.reveals[1]
+			other_reveals=chat.reveals[0]
+		if my_reveals.status and other_reveals.status:
+			name=requests.get('http://graph.facebook.com/'+other).json()['name']
+			photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
+		else:
+			name = other_reveals.fake_user
+			if requests.get('http://graph.facebook.com/'+other).json()['gender'] == "male":
+				photo="static/img/male1.jpg"
+			else:
+				photo="static/img/female.jpg"
 		desc = ""
 		if len(chat.messages) > 0:
 			desc = chat.messages[-1].text
@@ -64,10 +72,30 @@ def newMessage(sender,receiver,msg):
 	chat.update(add_to_set__messages=[new_msg])
 
 def createChat(user1, user2):
-	reveal1 = RevealChoice(user=user1)
-	reveal2 = RevealChoice(user=user2)
+	reveal1 = RevealChoice(user=user1,fake_user=getRandomName())
+	reveal2 = RevealChoice(user=user2,fake_user=getRandomName())
 	new_chat = Chat(pair=[user1,user2],reveals=[reveal1,reveal2])
 	return new_chat
+
+@app.route('/reveal',methods=['POST'])
+def changeStatus():
+	other_id = request.form.get('other')
+	my_id = session['fbid']
+	status = request.form.get('status')
+	chat=Chat.objects(pair__all=[my_id,other_id]).first()
+	if chat.reveals[0].user == session['fbid']:
+		my_reveals=chat.reveals[0]
+		other_reveals=chat.reveals[1]
+	else:
+		my_reveals=chat.reveals[1]
+		other_reveals=chat.reveals[0]
+	if status == "1":
+		my_reveals.status=True
+		chat.save()
+	elif status == "0":
+		my_reveals.status=False
+		chat.save()
+
 
 @app.route('/retrieveMessages')
 def getMessages():
@@ -86,7 +114,7 @@ def get_facebook_token(token=None):
 
 @app.route('/login')
 def login():
-	return facebook.authorize(callback = app.config['APP_DOMAIN']+'oauth_authorized')
+	return facebook.authorize(callback = url_for('oauth_authorized',next=request.args.get('next') or request.referrer,_external=True))
 
 @app.route('/logout')
 def logout():
@@ -112,7 +140,7 @@ def oauth_authorized(resp):
 		new_user = User(fbid=session['fbid'],name=session['name'],seen_top_matches=[],num_submitted=0)
 		new_user.save()	
 	send_username(basic_info['name'])
-	return redirect('/match')
+	return redirect(next_url)
 
 @app.route('/')
 @app.route('/index')
@@ -122,7 +150,7 @@ def index():
 @app.route('/match',methods=['GET'])
 def match():
 	if session.get('facebook_token') is None:
-		return redirect('/index')
+		return redirect('/login?next=%2Fmatch')
 # Here, we query for the user's friends list and each of their names, user ids, relationship statuses, and gender, taking only the data for friends who have Yale in their education history or their affiliations. 
 	if session.get('fixedfriends') is None:
 		session['fixedfriends'] = facebook.get('fql?q=SELECT%20name%2Cuid%2Crelationship_status%2Csex%20FROM%20user%20WHERE%20uid%20IN%20(SELECT%20uid1%20FROM%20friend%20WHERE%20uid2%3Dme())%20and%20(%27Yale%20University%27%20in%20education%20or%20%27Yale%27%20in%20affiliations)').data['data']

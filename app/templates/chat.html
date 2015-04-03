@@ -13,7 +13,7 @@
 					<ul class="message-user-list">
 						{% for chatter in chats %}
 						<li data-user="{{chatter.fbid}}">
-							<a href="#" class="user-link">
+							<a href="#" class="user-link" id=link{{chatter.fbid}}>
 								<span class="user-img"><img src="{{chatter.photo}}"></span>
 								<span class="user-title">{{chatter.name}}</span>
 								<p class="user-desc">{{chatter.desc}}</p>
@@ -40,6 +40,7 @@
 				</div>
 				<div class="message-south">
 					<div class="blocker"><textarea cols="20" rows="3" id="message"></textarea></div>
+          <button id="reveal">Reveal</button>
 					<button id="send">Send</button>
 					
 				</div>
@@ -48,6 +49,93 @@
 	</div>	
 
   	<script>
+     function scrollToBottom()
+    {
+      var objDiv = document.getElementById("chatlog");
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
+    function showNextMessage(sender, message)
+    {
+        if (!sender)
+        {
+          $(".message-thread").append('<div class="message bubble-right"><p>'+message+'</p> </div>');
+        }
+        else
+        {
+          $(".message-thread").append('<div class="message bubble-left"><p>'+message+'</p> </div>');
+        }
+    }
+    scrollToBottom();
+    enter_depressed = false;
+    //Sender: 0 if sent from user, 1 if sent from match
+    function sendMessage()
+    { 
+      if ($("#message").val() == "") return;
+      current=$("#chatlog").attr("data-user");
+      message={text:$("#message").val(),recipient:current}
+      socket.emit('message',message);
+      $("#message").val("");
+    }
+    function reveal()
+    {
+      current=$("#chatlog").attr("data-user");
+      $.post("/reveal",{other: current, status:"1"});
+      $(document).off();
+      $.ajax({
+        url: "",
+        success: function(s,x){
+          $("#wrapper").replaceWith($('#wrapper',s));
+          $("#send").click(sendMessage);
+          $("#reveal").click(reveal);
+          $("#message").keydown(enterDown);
+          $("#message").keyup(enterUp);
+          $('.user-link').click(link);
+          current=$("#chatlog").attr("data-user");
+          $.get("/getChat",{fbid:current},function(data){
+            $(".message-thread").replaceWith(data);
+            $('#link'+current).addClass('active');
+            scrollToBottom();
+          }
+          );
+
+        }
+      });
+    }
+    function enterDown(event)
+    {
+        if (!enter_depressed)x
+        { 
+            if (event.which == 13)
+            {
+                event.preventDefault();
+                enter_depressed = true;
+                sendMessage();
+            }
+        }
+    }
+    function enterUp(event)
+    {
+        event.preventDefault();
+        enter_depressed = false;
+    }
+    function link(event)
+    {
+      $('.user-link').removeClass('active');
+      $(event.target).addClass('active');
+      user=$(this).parent('li').attr("data-user")
+      $.get("/getChat",{fbid:user},function(data){
+        $(".message-thread").replaceWith(data);
+        scrollToBottom();
+      });
+    }
+
+    $("#send").click(sendMessage);
+    $("#reveal").click(reveal);
+    $("#message").keydown(enterDown);
+    $("#message").keyup(enterUp);
+    $('.user-link').click(link);
+    current=$("#chatlog").attr("data-user");
+    $('#link'+current).addClass('active');
     var token = "{{token}}";
     var socket = io.connect('/chat');
     socket.on('connect', function () {
@@ -70,58 +158,6 @@
     	$('li[data-user='+other+']').find(".user-desc").html(text);
 
     });
-  	//Sender: 0 if sent from user, 1 if sent from match
-    function scrollToBottom()
-    {
-      var objDiv = document.getElementById("chatlog");
-      objDiv.scrollTop = objDiv.scrollHeight;
-    }
-  	function showNextMessage(sender, message)
-    {
-       	if (!sender)
-       	{
-       		$(".message-thread").append('<div class="message bubble-right"><p>'+message+'</p> </div>');
-       	}
-       	else
-       	{
-       		$(".message-thread").append('<div class="message bubble-left"><p>'+message+'</p> </div>');
-       	}
-    }
-    scrollToBottom();
-    enter_depressed = false;
-    function sendMessage()
-    {	if ($("#message").val() == "") return;
-	    current=$("#chatlog").attr("data-user");
-	  	message={text:$("#message").val(),recipient:current}
-		socket.emit('message',message);
-		$("#message").val("");
-    }
-    $("#send").click(sendMessage);
-    $("#message").keydown(function(event)
-    {
-        if (!enter_depressed)
-        {	
-          	if (event.which == 13)
-            {
-              	event.preventDefault();
-              	enter_depressed = true;
-              	sendMessage();
-            }
-      	}
-    });
-    $("#message").keyup(function(event)
-   	{
-        event.preventDefault();
-        enter_depressed = false;
-    });
-    $('.user-link').click(function(){
-    $('.user-link').removeClass('active');
-    $(this).addClass('active');
-    user=$(this).parent('li').attr("data-user")
-    $.get("/getChat",{fbid:user},function(data){
-      $(".message-thread").replaceWith(data);
-      scrollToBottom();
-    });
-    });
+
     </script>
 {% endblock %}

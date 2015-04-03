@@ -16,14 +16,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
-	app.config['APP_DOMAIN'] = 'http://localhost:5000/'
+	app.config['SERVER_NAME'] = 'localhost:5000'
 	connect('matches')
 	app.config['DEBUG'] = True
 	store = RedisStore(redis.StrictRedis())
 	KVSessionExtension(store, app)
 
 else:
-	app.config['APP_DOMAIN'] = 'http://www.matchboxapp.me/'
+	app.config['SERVER_NAME'] = 'www.matchboxapp.me'
 	connect('matches',host=os.environ['MONGOLAB_URI'])
 	url = urlparse.urlparse(os.environ['REDISCLOUD_URL'])
 	store = RedisStore(redis.StrictRedis(host=url.hostname, port=url.port, password=url.password))
