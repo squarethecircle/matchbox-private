@@ -6,8 +6,17 @@ from app import app, views, models
 # Test data to allow us to set the session variables
 lifestyle_male_friends = []
 lifestyle_female_friends = []
-lifestyle_ids = [100000117930891, 1673808394, 749512978, 629263828, 1120293045, 100000279378280, 1646941022, 644659874, 707859779, 774168034, 821596896, 1235948517, 1306399238, 1293191998, 1391794445, 1471153226, 1522524524, 1666913902, 1577529446, 1598222289, 100004191697613, 100000359149448, 100000892201552, 100001288758840]
-top_matches_ids = [(1375642201, 1646941022), (705579939, 100003888319326), (644659874, 1425476801), (707859779, 1321417892), (707859779, 100005920514441), (644659874, 100005920514441), (1375642201, 1522524524), (1306399238, 100000742350322), (1293191998, 100000742350322), (1235948517, 100004191697613), (100000279378280, 1397434942),  (100000486251970, 1490615349),  (100004797271381, 100000163821701), (100000117930891, 1391794445), (100000117930891, 1471153226), (821596896, 1471153226), (774168034,  1397434942), (100000117930891, 1321417892), (100000279378280, 1490615349), (821596896, 1391794445), (774168034, 100001663293430), (100000279378280, 1321417892), (774168034, 100000742350322), (1293191998, 1321417892), (1293191998, 1471153226), (100000279378280, 100000163821701), (1293191998, 1391794445), (100004797271381, 1425476801), (100000892201552, 1425476801), (100000892201552, 1522524524), (100000279378280, 1248783721), (100002804284636, 1248783721)]
+lifestyle_ids = [100000117930891, 1673808394, 749512978, 629263828, 1120293045, 100000279378280, 1646941022, 644659874, 
+707859779, 774168034, 821596896, 1235948517, 1306399238, 1293191998, 1391794445, 1471153226, 1522524524, 1666913902, 
+1577529446, 1598222289, 100004191697613, 100000359149448, 100000892201552, 100001288758840]
+top_matches_ids = [(1375642201, 1646941022), (705579939, 100003888319326), (644659874, 1425476801), (707859779, 1321417892), 
+(707859779, 100005920514441), (644659874, 100005920514441), (1375642201, 1522524524), (1306399238, 100000742350322), 
+(1293191998, 100000742350322), (1235948517, 100004191697613), (100000279378280, 1397434942),  (100000486251970, 1490615349),  
+(100004797271381, 100000163821701), (100000117930891, 1391794445), (100000117930891, 1471153226), (821596896, 1471153226), 
+(774168034,  1397434942), (100000117930891, 1321417892), (100000279378280, 1490615349), (821596896, 1391794445), 
+(774168034, 100001663293430), (100000279378280, 1321417892), (774168034, 100000742350322), (1293191998, 1321417892), 
+(1293191998, 1471153226), (100000279378280, 100000163821701), (1293191998, 1391794445), (100004797271381, 1425476801), 
+(100000892201552, 1425476801), (100000892201552, 1522524524), (100000279378280, 1248783721), (100002804284636, 1248783721)]
 male_friends = [{
       "name": "Mr Test 1", 
       "relationship_status": "", 
@@ -74,7 +83,9 @@ class MatchboxTestCase(unittest.TestCase):
             new_user.save() 
 
     def test_database(self):
-        test_match = models.Match(friends=['100100', '100101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
+        test_match = models.Match(friends=['100100', '100101'], friend_names=['MrTester', 'MrsTester'], 
+          matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0,
+          nonmatcher_names=[], confirmed=False)
         add_database = test_match.save()
 
         get_database = models.Match.objects(friends__all=['100100', '100101']).first()
@@ -98,7 +109,9 @@ class MatchboxTestCase(unittest.TestCase):
 
     # Adds a test accepted match to the database (which already contains the match) -- check that updates are made correctly
     def test_increment_accept_match(self):
-        test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
+        test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], 
+          matchers=['10010001000'], num_matchers=1, matcher_names=['MrMatcher'], 
+          nonmatchers=[], num_nonmatchers=0, nonmatcher_names=[], confirmed=False)
         test_match.save()
 
         self.app.post('match', data={'friend1':'200100', 'friend2':'200101', 
@@ -111,7 +124,9 @@ class MatchboxTestCase(unittest.TestCase):
 
     # TODO: needs some fixing
     # def test_increment_reject_match(self):
-    #     test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], matchers=[], num_matchers=0, matcher_names=[], nonmatchers=['10010001000'], num_nonmatchers=1, nonmatcher_names=['MrMatcher'], confirmed=False)
+    #     test_match = models.Match(friends=['200100', '200101'], friend_names=['MrTester', 'MrsTester'], 
+    #       matchers=[], num_matchers=0, matcher_names=[], nonmatchers=['10010001000'], num_nonmatchers=1, 
+    #       nonmatcher_names=['MrMatcher'], confirmed=False)
     #     test_match.save()
         
     #     # print models.Match.objects().all()
