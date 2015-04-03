@@ -130,9 +130,10 @@ h1 {
 	float: left;
 	clear: left;
 	width: 25%;
-	height: 128%;
+	height: 128.3%;
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
+	background-color: #ECEDED;
 }
 .message-container > .message-north > .message-user-list a {
 	display: block;
