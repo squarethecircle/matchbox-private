@@ -1,11 +1,10 @@
-<div class="message-thread" id="chatlog" {% if chats %}data-user="{{chats[0].fbid}}"{% endif %}>
+<div class="message-thread" id="chatlog" {{other_fbid}}>
 	{% for message in messages %}
 	{% if loop.first or message.sent_time - last_message_time > twenty_minutes %}
 	<div class="message-timestamp">
 		{{ view_func(message.sent_time) }}
 	</div>
 	{% endif %}
-
 	{% if message.sender == my_fbid %}
 	<div class="message bubble-right">
 		<p>{{message.text}}</p>

@@ -13,7 +13,7 @@
 					<ul class="message-user-list">
 						{% for chatter in chats %}
 						<li data-user="{{chatter.fbid}}">
-							<a href="#" class="user-link" id=link{{chatter.fbid}}>
+							<a href="#" class="user-link {% if loop.first %}active{%endif%}" id=link{{chatter.fbid}}>
                 {% if not chatter.status %} <button id="reveal">?</button>{% endif %}
 								<span class="user-img"><img src="{{chatter.photo}}"></span>
 								<span class="user-title">{{chatter.name}}</span>
@@ -66,27 +66,27 @@
     {
       var r = confirm("Are you sure you want to reveal your identity?  It will not be shown until your chat partner also chooses to reveal.  This action cannot be undone.");
       if (!r) return;
+      current=$("#chatlog").attr("data-user");
+      $.post("/reveal",{other: current, status:"1"});
+
       refresh();
     }
     function refresh()
     {
       current=$("#chatlog").attr("data-user");
-      $.post("/reveal",{other: current, status:"1"});
       $(document).off();
       $.ajax({
-        url: "",
+        url: "/chat?token=false",
         success: function(s,x){
-          $("#wrapper").replaceWith($('#wrapper',s));
+          $(".message-user-list").html(($('.message-user-list',s)));
           $("#send").click(sendMessage);
           $("#reveal").click(reveal);
           $("#message").keydown(enterDown);
           $("#message").keyup(enterUp);
           $('.user-link').click(link);
-          current=$("#chatlog").attr("data-user");
           $.get("/getChat",{fbid:current},function(data){
-            $(".message-thread").replaceWith(data);
+            $("#chatlog").html($(data).html());
             $('#link'+current).addClass('active');
-            scrollToBottom();
           }
           );
 
@@ -150,6 +150,6 @@
     	$('li[data-user='+other+']').find(".user-desc").html(text);
 
     });
-
+    window.setInterval(refresh,60000);
     </script>
 {% endblock %}

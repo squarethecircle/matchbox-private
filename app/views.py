@@ -17,6 +17,9 @@ blacklist = [1598222289,1389627032,100007479487216,100009034776491,1000056562646
 def chat():
 	if session.get('facebook_token') is None:
 		return redirect('/login?next=%2Fchat')
+	if request.args.get('token') == 'false':
+		token=User.objects(fbid=session['fbid']).first().chat_token
+	#else:
 	token=hexlify(urandom(32))
 	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
 	query=Chat.objects(pair__all=[session['fbid']]).order_by('-messages')
@@ -51,7 +54,9 @@ def chat():
 		messages=query[0].messages
 	else:
 		messages=[]
-	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
+	if chats:
+		other_string='data-user=%s' % chats[0]['fbid']
+	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,other_fbid=other_string,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
 
 @app.route('/getChat')
 def getChat():
@@ -60,7 +65,8 @@ def getChat():
 		messages=query.messages
 	else:
 		messages=[]
-	return render_template('chat_partial.html',my_fbid=session['fbid'],other_fbid=request.args.get('fbid'),chat=query,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
+	other_string='data-user=%s' % request.args.get('fbid')
+	return render_template('chat_partial.html',my_fbid=session['fbid'],other_fbid=other_string,messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
 
 def newMessage(sender,receiver,msg):
 	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
@@ -353,26 +359,28 @@ def send_username(name):
 
 # A function to generate the amount of time that has elasped since a message was sent, to be displayed to the user.
 def getTimeStamp(value):
-    """
-    Finds the difference between the datetime value given and now()
-    and returns appropriate humanize form
-    """
-    from datetime import datetime
+	"""
+	Finds the difference between the datetime value given and now()
+	and returns appropriate humanize form
+	"""
+	from datetime import datetime
  
-    if isinstance(value, datetime):
-        delta = datetime.now() - value
-        if delta.days > 6:
-            return value.strftime("%b %d")                    # May 15
-        if delta.days > 1:
-            return value.strftime("%A")                       # Wednesday
-        elif delta.days == 1:
-            return 'yesterday'                                # yesterday
-        elif delta.seconds > 3600:
-            return str(delta.seconds / 3600 ) + ' hours ago'  # 3 hours ago
-        elif delta.seconds >  120:
-            return str(delta.seconds/60) + ' minutes ago'     # 29 minutes ago
-        else:
-            return 'a moment ago'                             # a moment ago
+	if isinstance(value, datetime):
+		delta = datetime.now() - value
+		if delta.days > 6:
+			return value.strftime("%b %d")                    # May 15
+		if delta.days > 1:
+			return value.strftime("%A")                       # Wednesday
+		elif delta.days == 1:
+			return 'yesterday'                                # yesterday
+		elif delta.seconds > 7200:
+			return str(delta.seconds / 3600 ) + ' hours ago'  # 3 hours ago
+		elif delta.seconds > 3600:
+			 return str(delta.seconds / 3600 ) + ' hour ago'  # 3 hours ago
+		elif delta.seconds >  120:
+			return str(delta.seconds/60) + ' minutes ago'     # 29 minutes ago
+		else:
+			return 'a moment ago'                             # a moment ago
 
 
 # A function to generate random names for anonymous matches, so that users can differentiate between their chats.

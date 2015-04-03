@@ -14,7 +14,8 @@ monkey.patch_all()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
-
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 if os.environ['MATCHMAKING_STATUS'] == 'DEBUG':
 	app.config['SERVER_NAME'] = 'localhost:5000'
 	connect('matches')
