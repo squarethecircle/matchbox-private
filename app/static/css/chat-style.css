@@ -215,7 +215,7 @@ h1 {
 	margin: 5px;
 	margin-bottom: 2%;
 	padding: 3px 5px 3px 5px;
-	cursor: pointer;
+	cursor: default;
 	word-wrap: break-word;
 
 }
@@ -239,11 +239,14 @@ h1 {
 	float: left;
 	margin-left: 3px;
 }
-.message-container > .message-north > .message-thread > .message .message-timestamp {
-	display: none;
-	float: right;
-	margin-right: 3px;
-	text-align: right;
+.message-container > .message-north > .message-thread .message-timestamp {
+	display: block;
+	clear: both;
+	font-size: 13px;
+	font-weight: bold;
+	color: #5A5A5A;
+	cursor: default;	
+	text-align: center;
 }
 
 .message-container > .message-south > .blocker {
