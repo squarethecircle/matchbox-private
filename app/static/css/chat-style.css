@@ -291,7 +291,6 @@ h1 {
 	cursor: pointer;
 }
 
-
  #reveal {
  	display:auto;
  	float:right;
@@ -299,7 +298,12 @@ h1 {
  	height:30px;
  	width:30px;
   	color: #000000;
-  	background: #ff3030;
+  	background: #ff6730;
+  	background-image: -webkit-linear-gradient(top, #ff6730, #fa3f00);
+  	background-image: -moz-linear-gradient(top, #ff6730, #fa3f00);
+  	background-image: -ms-linear-gradient(top, #ff6730, #fa3f00);
+  	background-image: -o-linear-gradient(top, #ff6730, #fa3f00);
+  	background-image: linear-gradient(to bottom, #ff6730, #fa3f00);
   	text-decoration: none;
 }
 .message-container > .message-south > button:hover {
@@ -309,12 +313,12 @@ h1 {
 	background:         linear-gradient(#FFFFFF, #DFDFDF);
 }
   #reveal:hover {
-  background: #fa4444;
-  background-image: -webkit-linear-gradient(top, #fa4444, #f02727);
-  background-image: -moz-linear-gradient(top, #fa4444, #f02727);
-  background-image: -ms-linear-gradient(top, #fa4444, #f02727);
-  background-image: -o-linear-gradient(top, #fa4444, #f02727);
-  background-image: linear-gradient(to bottom, #fa4444, #f02727);
+  background: #ff8059;
+  background-image: -webkit-linear-gradient(top, #fa7249, #fc2e00);
+  background-image: -moz-linear-gradient(top, #fa7249, #fc2e00);
+  background-image: -ms-linear-gradient(top, #fa7249, #fc2e00);
+  background-image: -o-linear-gradient(top, #fa7249, #fc2e00);
+  background-image: linear-gradient(to bottom, #fa7249, #fc2e00);
   text-decoration: none;
 }
 #reveal:active {
