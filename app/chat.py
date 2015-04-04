@@ -73,8 +73,8 @@ def newMessage(sender,receiver,msg):
 	chat.update(add_to_set__messages=[new_msg])
 
 def createChat(user1,user2,anonymous=True):
-	name1=User.objects(fbid=user1).first().name
-	name2=User.objects(fbid=user2).first().name
+	#name1=User.objects(fbid=user1).first().name
+	#name2=User.objects(fbid=user2).first().name
 	if anonymous:
 		reveal1 = RevealChoice(user=user1,fake_user=getRandomName().title())
 		reveal2 = RevealChoice(user=user2,fake_user=getRandomName().title())
