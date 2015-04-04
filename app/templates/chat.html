@@ -113,7 +113,14 @@
     function link(event)
     {
       $('.user-link').removeClass('active');
-      $(event.target).addClass('active');
+      if ($(event.target).hasClass('user-link'))
+      {
+        $(event.target).addClass('active');
+      }
+      else
+      {
+        $(event.target).parent('.user-link').addClass('active');
+      }
       user=$(this).parent('li').attr("data-user")
       $.get("/getChat",{fbid:user},function(data){
         $(".message-thread").replaceWith(data);
