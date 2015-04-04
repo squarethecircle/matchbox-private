@@ -8,6 +8,9 @@
     <meta name="author" content="">
     <script src="{{url_for('static',filename='js/jquery.js')}}"></script>
     <script src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script>$(function(){$.backstretch("/static/img/yale.jpg");});</script>
+
     <!-- Bootstrap Core CSS -->
     <link href="{{url_for('static',filename='css/bootstrap.min.css')}}" rel="stylesheet">
 
@@ -17,7 +20,7 @@
     <!-- Custom Fonts -->
     <link href="{{url_for('static',filename='font-awesome/css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-
+    
     <title>MatchboxMVP</title>
   </head>
   <body>
@@ -25,6 +28,7 @@
     {% block content %}{% endblock %}
   </div>
   </body>
+
 </html>
 
 
