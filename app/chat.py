@@ -68,16 +68,16 @@ def newMessage(sender,receiver,msg):
 	new_msg = Message(sender=sender,recipient=receiver,text=msg,sent_time=datetime.datetime.now())
 	chat = Chat.objects(pair__all=[sender,receiver]).first()
 	if chat is None:
-		chat=createChat(sender,receiver)
-		chat.save()
+		createChat(sender,receiver)
 	chat.update(add_to_set__messages=[new_msg])
 
 def createChat(user1, user2):
+	name1=User.objects(fbid=user1).first().name
+	name2=User.objects(fbid=user2).first().name
 	reveal1 = RevealChoice(user=user1,fake_user=getRandomName().title())
 	reveal2 = RevealChoice(user=user2,fake_user=getRandomName().title())
-	new_chat = Chat(pair=[user1,user2],reveals=[reveal1,reveal2])
+	new_chat = Chat(pair=[user1,user2],pair_names=[name1,name2],reveals=[reveal1,reveal2])
 	new_chat.save()
-	return new_chat
 
 @app.route('/reveal',methods=['POST'])
 def changeStatus():

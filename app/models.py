@@ -32,5 +32,6 @@ class RevealChoice(EmbeddedDocument):
 
 class Chat(Document):
 	pair = ListField(StringField(max_length=30))
+	pair_names = ListField(StringField(max_length=100))
 	reveals = ListField(EmbeddedDocumentField(RevealChoice))
 	messages = SortedListField(EmbeddedDocumentField(Message),ordering='sent_time',reverse=True)
