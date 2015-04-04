@@ -291,7 +291,7 @@ h1 {
 	cursor: pointer;
 }
 
- #reveal {
+ .reveal {
  	display:auto;
  	float:right;
  	box-shadow:none;
@@ -312,7 +312,7 @@ h1 {
 	background:      -o-linear-gradient(#FFFFFF, #DFDFDF);
 	background:         linear-gradient(#FFFFFF, #DFDFDF);
 }
-  #reveal:hover {
+ .reveal:hover {
   background: #ff8059;
   background-image: -webkit-linear-gradient(top, #fa7249, #fc2e00);
   background-image: -moz-linear-gradient(top, #fa7249, #fc2e00);
@@ -321,7 +321,7 @@ h1 {
   background-image: linear-gradient(to bottom, #fa7249, #fc2e00);
   text-decoration: none;
 }
-#reveal:active {
+.reveal:active {
 	box-shadow: inset 0px 0px 10px #5A5A5A;
 }
 .message-container > .message-south > button:active {

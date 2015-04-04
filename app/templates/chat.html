@@ -14,7 +14,7 @@
 						{% for chatter in chats %}
 						<li data-user="{{chatter.fbid}}">
 							<a href="#" class="user-link {% if loop.first %}active{%endif%}" id=link{{chatter.fbid}}>
-                {% if not chatter.status %} <button id="reveal">?</button>{% endif %}
+                {% if not chatter.status %} <button class="reveal">?</button>{% endif %}
 								<span class="user-img"><img src="{{chatter.photo}}"></span>
 								<span class="user-title">{{chatter.name}}</span>
 								<p class="user-desc">{{chatter.desc}}</p>
@@ -80,7 +80,7 @@
         success: function(s,x){
           $(".message-user-list").html(($('.message-user-list',s)));
           $("#send").click(sendMessage);
-          $("#reveal").click(reveal);
+          $(".reveal").click(reveal);
           $("#message").keydown(enterDown);
           $("#message").keyup(enterUp);
           $('.user-link').click(link);
