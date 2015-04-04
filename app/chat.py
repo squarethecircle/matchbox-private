@@ -81,7 +81,7 @@ def createChat(user1,user2,anonymous=True):
 	else:
 		reveal1 = RevealChoice(user=user1,fake_user=getRandomName().title(),status=True)
 		reveal2 = RevealChoice(user=user2,fake_user=getRandomName().title(),status=True)
-	new_chat = Chat(pair=[user1,user2],pair_names=[name1,name2],reveals=[reveal1,reveal2])
+	new_chat = Chat(pair=[user1,user2],reveals=[reveal1,reveal2])
 	new_chat.save()
 
 @app.route('/reveal',methods=['POST'])
