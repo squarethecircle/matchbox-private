@@ -13,7 +13,7 @@
 					<ul class="message-user-list">
 						{% for chatter in chats %}
 						<li data-user="{{chatter.fbid}}">
-							<a href="#" class="user-link {% if loop.first %}active{%endif%}" id=link{{chatter.fbid}}>
+							<a href="#" class="user-link {% if chatter.fbid == other_fbid.split('=')[1] %}active{%endif%}" id=link{{chatter.fbid}}>
                 {% if not chatter.status %} <button class="reveal">?</button>{% endif %}
 								<span class="user-img"><img src="{{chatter.photo}}"></span>
 								<span class="user-title">{{chatter.name}}</span>
@@ -76,7 +76,7 @@
       current=$("#chatlog").attr("data-user");
       $(document).off();
       $.ajax({
-        url: "/chat?token=false",
+        url: "/chat?token=false&current="+current,
         success: function(s,x){
           $(".message-user-list").html(($('.message-user-list',s)));
           $("#send").click(sendMessage);
@@ -86,7 +86,6 @@
           $('.user-link').click(link);
           $.get("/getChat",{fbid:current},function(data){
             $("#chatlog").html($(data).html());
-            $('.user-link').removeClass('active');
             $('#link'+current).addClass('active');
           }
           );

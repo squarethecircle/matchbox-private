@@ -49,8 +49,11 @@ def chat():
 	else:
 		messages=[]
 	other_string=""
+	current_user=chats[0]['fbid']
+	if request.args.get('current'):
+		current_user=request.args.get('current')
 	if chats:
-		other_string='data-user=%s' % chats[0]['fbid']
+		other_string='data-user=%s' % current_user
 	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,other_fbid=other_string,
 		messages=messages,view_func=getTimeStamp,twenty_minutes=datetime.timedelta(minutes=20))
 
