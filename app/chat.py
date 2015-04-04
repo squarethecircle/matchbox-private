@@ -48,6 +48,7 @@ def chat():
 		messages=query[0].messages
 	else:
 		messages=[]
+	other_string=""
 	if chats:
 		other_string='data-user=%s' % chats[0]['fbid']
 	return render_template('chat.html',token=token,my_fbid=session['fbid'],chats=chats,other_fbid=other_string,
