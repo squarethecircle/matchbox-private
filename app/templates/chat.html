@@ -86,6 +86,7 @@
           $('.user-link').click(link);
           $.get("/getChat",{fbid:current},function(data){
             $("#chatlog").html($(data).html());
+            $('.user-link').removeClass('active');
             $('#link'+current).addClass('active');
           }
           );
