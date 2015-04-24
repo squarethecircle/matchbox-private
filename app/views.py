@@ -7,6 +7,10 @@ from sockets import *
 from matches import *
 from random import randint
 
+@app.after_request
+def add_cors(resp):
+	resp.headers['Access-Control-Allow-Credentials'] = 'true'
+
 @facebook.tokengetter
 def get_facebook_token(token=None):
 	return session.get('facebook_token')
