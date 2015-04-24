@@ -107,6 +107,59 @@ def changeStatus():
 		chat.save()
 	return "Success"
 
+@app.route('/jsonifyChat')
+def jsonifyChat():
+	if session.get('facebook_token') is None:
+		return redirect('/login?next=%2Fchat')
+	if request.args.get('token') == 'false':
+		token=User.objects(fbid=session['fbid']).first().chat_token
+	#else:
+	token=hexlify(urandom(32))
+	user=User.objects(fbid=session['fbid']).update_one(set__chat_token=token)
+	query=Chat.objects(pair__all=[session['fbid']]).order_by('-messages')
+	#chats_filtered=[]
+	#for chat in chats:
+	#	if chat.reveals[0].status is False or chat.reveals[1].status is False
+	chats=[]
+	for chat in query:
+		chat.pair.remove(session['fbid'])
+		other=chat.pair[0]
+		if chat.reveals[0].user == session['fbid']:
+			my_reveals=chat.reveals[0]
+			other_reveals=chat.reveals[1]
+		else:
+			my_reveals=chat.reveals[1]
+			other_reveals=chat.reveals[0]
+		if my_reveals.status and other_reveals.status:
+			name=requests.get('http://graph.facebook.com/'+other).json()['name']
+			photo=requests.get('http://graph.facebook.com/'+other+'/picture?width=40&height=40',allow_redirects=False).headers['location']
+		else:
+			name = other_reveals.fake_user
+			if requests.get('http://graph.facebook.com/'+other).json()['gender'] == "male":
+				photo="static/img/male1.jpg"
+			else:
+				photo="static/img/female.jpg"
+		desc = ""
+		if len(chat.messages) > 0:
+			desc = chat.messages[-1].text
+		chats.append({'name':name,'fbid':other,'photo':photo,'desc':desc,'status':my_reveals.status})
+	#return jsonify({'data':query[0].messages})
+	if query:
+		messages=query[0].messages
+	else:
+		messages=[]
+	other_string=""
+	current_user=chats[0]['fbid']
+	if request.args.get('current'):
+		current_user=request.args.get('current')
+	if chats:
+		other_string='data-user=%s' % current_user
+	json_messages = []
+	for message in messages:
+		json_message = {'sender':message.sender,'recipient':message.recipient,'text':message.text}
+		json_messages.append(json_message)
+	ChatJSon = {'token':token, 'my_fbid':session['fbid'], 'chats':chats, 'other_fbid':other_string, 'messages':json_messages}
+	return jsonify(ChatJSon)
 
 @app.route('/retrieveMessages')
 def getMessages():
