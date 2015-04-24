@@ -17,7 +17,7 @@ def login():
 
 @app.route('/app_login')
 def app_login():
-	session['facebook_token'] = (request.args.get('token'),request.get.args('expiry'))
+	session['facebook_token'] = (request.args.get('token'),request.args.get('expiry'))
 	return "Logged in!"
 @app.route('/logout')
 def logout():
