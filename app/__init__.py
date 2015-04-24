@@ -45,7 +45,7 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': 'email,public_profile,user_friends,friends_education_history,friends_relationships'}
 )
 app.config['MAILGUN_KEY']=os.environ['MATCHMAKING_MAILGUN_KEY']
-
+app.config['SESSION_COOKIE_HTTPONLY'] = False
 if __name__ == '__main__':
     SocketIOServer(
         ('', app.config['PORT']), 
