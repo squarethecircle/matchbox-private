@@ -15,6 +15,10 @@ def get_facebook_token(token=None):
 def login():
 	return facebook.authorize(callback = url_for('oauth_authorized',next=request.args.get('next') or request.referrer,_external=True))
 
+@app.route('/app_login')
+def app_login():
+	session['facebook_token'] = request.args.get('token')
+	return "Logged in!"
 @app.route('/logout')
 def logout():
 	session.pop('facebook_token')

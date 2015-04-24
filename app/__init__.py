@@ -7,12 +7,13 @@ from mongoengine import connect
 import urlparse
 from gevent import monkey
 from socketio.server import SocketIOServer
-
+from flask.ext.cors import CORS
 monkey.patch_all()
 
 
 
 app = Flask(__name__)
+cors = CORS(app)
 app.config['SECRET_KEY'] = os.environ['MATCHMAKING_SECRET_KEY']
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
