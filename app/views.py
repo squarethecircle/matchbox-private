@@ -17,7 +17,7 @@ def login():
 
 @app.route('/app_login')
 def app_login():
-	session['facebook_token'] = request.args.get('token')
+	session['facebook_token'] = (request.args.get('token'),request.get.args('expiry'))
 	return "Logged in!"
 @app.route('/logout')
 def logout():
@@ -33,6 +33,7 @@ def oauth_authorized(resp):
 		flash(u'You denied the request to sign in.')
 		return redirect(next_url)
 	session['facebook_token'] = (resp['access_token'], resp['expires'])
+	return jsonify({"data":[resp['access_token'], resp['expires']]})
 	basic_info = facebook.get('me?fields=id,name').data
 	if 'fbid' in session and session['fbid'] != basic_info['id']:
 		session.pop('fixedfriends',None)
